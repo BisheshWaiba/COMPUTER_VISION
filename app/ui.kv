@@ -1,0 +1,255 @@
+#:set BG (0.953, 0.941, 0.914, 1)
+#:set INK (0.12, 0.11, 0.10, 1)
+#:set MUTED (0.42, 0.40, 0.37, 1)
+#:set ACCENT (0.70, 0.07, 0.18, 1)
+#:set CARD (1, 1, 1, 1)
+#:set PRESSED (0.93, 0.92, 0.90, 1)
+#:set LINE (0.86, 0.84, 0.80, 1)
+
+<WrapLabel@Label>:
+    size_hint_y: None
+    height: self.texture_size[1]
+    text_size: self.width, None
+    halign: "left"
+    valign: "top"
+    color: INK
+
+
+<FigureCard>:
+    orientation: "horizontal"
+    size_hint_y: None
+    height: max(dp(128), text_box.height + dp(28))
+    padding: dp(14)
+    spacing: dp(14)
+    canvas.before:
+        Color:
+            rgba: PRESSED if self.state == "down" else CARD
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(18)]
+    Widget:
+        size_hint: None, None
+        size: dp(100), dp(100)
+        pos_hint: {"top": 1}
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [dp(12)]
+                source: root.thumbnail
+    BoxLayout:
+        id: text_box
+        orientation: "vertical"
+        size_hint_y: None
+        height: self.minimum_height
+        pos_hint: {"top": 1}
+        spacing: dp(5)
+        WrapLabel:
+            text: root.title
+            bold: True
+            font_size: "17sp"
+        WrapLabel:
+            text: root.description
+            font_size: "13sp"
+            color: MUTED
+        WrapLabel:
+            text: "{} parts to explore".format(root.parts_count)
+            font_size: "12sp"
+            bold: True
+            color: ACCENT
+
+
+<GalleryScreen>:
+    canvas.before:
+        Color:
+            rgba: BG
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: self.minimum_height
+            padding: dp(20), dp(28), dp(20), dp(12)
+            spacing: dp(4)
+            WrapLabel:
+                text: "Figures of Nepal"
+                bold: True
+                font_size: "28sp"
+            WrapLabel:
+                text: "Choose a figure to explore it in 3D."
+                font_size: "14sp"
+                color: MUTED
+        ScrollView:
+            do_scroll_x: False
+            bar_width: 0
+            BoxLayout:
+                id: cards
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(16), dp(8), dp(16), dp(24)
+                spacing: dp(14)
+
+
+<BackButton>:
+    canvas:
+        Color:
+            rgba: PRESSED if self.state == "down" else (0, 0, 0, 0)
+        Ellipse:
+            pos: self.center_x - dp(20), self.center_y - dp(20)
+            size: dp(40), dp(40)
+        Color:
+            rgba: INK
+        Line:
+            points: [self.center_x + dp(4), self.center_y + dp(9), self.center_x - dp(5), self.center_y, self.center_x + dp(4), self.center_y - dp(9)]
+            width: dp(1.4)
+            cap: "round"
+            joint: "round"
+
+
+<Chip>:
+    size_hint_x: None
+    width: self.texture_size[0] + dp(28)
+    font_size: "14sp"
+    bold: self.selected
+    color: (1, 1, 1, 1) if self.selected else INK
+    canvas.before:
+        Color:
+            rgba: ACCENT if self.selected else (PRESSED if self.state == "down" else CARD)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [self.height / 2]
+
+
+<InfoCard>:
+    orientation: "vertical"
+    size_hint: None, None
+    width: (self.parent.width if self.parent else dp(200)) - dp(24)
+    height: self.minimum_height
+    x: (self.parent.x if self.parent else 0) + dp(12)
+    y: (self.parent.y if self.parent else 0) + dp(10)
+    opacity: 1 if self.shown else 0
+    padding: dp(16), dp(8), dp(6), dp(14)
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.10
+        RoundedRectangle:
+            pos: self.x, self.y - dp(2)
+            size: self.width, self.height + dp(3)
+            radius: [dp(18)]
+        Color:
+            rgba: CARD
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(18)]
+    BoxLayout:
+        size_hint_y: None
+        height: dp(40)
+        Label:
+            text: root.title
+            bold: True
+            font_size: "17sp"
+            color: ACCENT
+            text_size: self.size
+            halign: "left"
+            valign: "middle"
+            shorten: True
+            shorten_from: "right"
+        Button:
+            size_hint_x: None
+            width: dp(40)
+            text: "×"
+            font_size: "24sp"
+            color: MUTED
+            background_normal: ""
+            background_down: ""
+            background_color: 0, 0, 0, 0
+            on_release: root.dispatch("on_close")
+    BoxLayout:
+        size_hint_y: None
+        height: self.minimum_height
+        padding: 0, 0, dp(10), 0
+        WrapLabel:
+            text: root.info
+            font_size: "14sp"
+            line_height: 1.15
+
+
+<ViewerScreen>:
+    canvas.before:
+        Color:
+            rgba: BG
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            size_hint_y: None
+            height: dp(56)
+            padding: dp(4), 0, dp(16), 0
+            BackButton:
+                size_hint_x: None
+                width: dp(48)
+                on_release: app.show_gallery()
+            Label:
+                text: root.title
+                bold: True
+                font_size: "18sp"
+                color: INK
+                text_size: self.size
+                halign: "left"
+                valign: "middle"
+                shorten: True
+                shorten_from: "right"
+        FloatLayout:
+            Model3DView:
+                id: view
+                pos_hint: {"x": 0, "y": 0}
+                on_pick: root.on_pick(args[1])
+            Label:
+                text: root.status
+                pos_hint: {"x": 0, "y": 0}
+                color: MUTED
+                font_size: "14sp"
+                opacity: 0 if view.has_frame else 1
+            Label:
+                text: "Drag to rotate  ·  Pinch to zoom  ·  Tap a part"
+                size_hint: 1, None
+                height: dp(28)
+                pos_hint: {"x": 0, "top": 1}
+                color: MUTED
+                font_size: "12sp"
+                opacity: 1 if view.has_frame and not card.shown else 0
+            InfoCard:
+                id: card
+                on_close: root.select("")
+        Widget:
+            size_hint_y: None
+            height: dp(1)
+            canvas:
+                Color:
+                    rgba: LINE
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        ScrollView:
+            id: chip_scroll
+            size_hint_y: None
+            height: dp(60)
+            do_scroll_y: False
+            bar_width: 0
+            BoxLayout:
+                id: chips
+                size_hint_x: None
+                width: self.minimum_width
+                padding: dp(12), dp(11)
+                spacing: dp(8)

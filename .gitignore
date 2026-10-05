@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Asset pipeline: downloaded or generated, too large for git
+asset_pipeline/.venv/
+asset_pipeline/models/
+asset_pipeline/Hunyuan3D-2/
+asset_pipeline/renders/
+
+# Local editor settings
+.claude/settings.local.json
