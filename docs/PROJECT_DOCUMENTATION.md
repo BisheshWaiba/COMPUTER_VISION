@@ -3,13 +3,17 @@
 ## 1. Overview
 
 Figures of Nepal is an interactive 3D gallery built with Python. It presents
-five figures as explorable GLB models:
+three figures as explorable GLB models:
 
 1. Prithvi Narayan Shah
-2. Nepali Man in Daura Suruwal
-3. Nepali Woman in Kurtha Suruwal
-4. Nepali Man with Istakot and Dhaka Topi (painted from a photograph)
-5. Nepali Woman in Gunyu Cholo (painted from front and back photographs)
+2. Nepali Man with Istakot and Dhaka Topi (painted from a photograph)
+3. Nepali Woman in Gunyu Cholo (painted from front and back photographs)
+
+All text is available in English and Nepali. A button at the top right of both screens
+switches language. The app's own words and fonts are in `app/strings.py`; the text about
+the figures is stored per language in `assets/figures.json` as `{"en": ..., "ne": ...}`.
+Nepali is drawn with the bundled Noto Sans Devanagari font, which has no Latin letters,
+so Nepali text must not contain any.
 
 The application is designed for desktop use, but its Kivy layout and touch
 handling also support a phone-shaped interaction model. Each model is divided
@@ -89,6 +93,8 @@ The application reads `assets/figures.json`. Each figure entry contains:
 - `model`: relative path to a GLB file.
 - `thumbnail`: relative path to a thumbnail image.
 - `parts`: mapping from GLB node names to a label and information text.
+
+`title`, `description`, `label` and `info` each hold the text per language.
 
 The keys under `parts` must match mesh-node names inside the corresponding GLB.
 For example, the key `dhaka_topi` must identify a node named
@@ -183,13 +189,13 @@ cd "C:\Users\prasi\Desktop\Project II\COMPUTER_VISION\asset_pipeline"
 The mesh-generation script accepts optional figure names:
 
 ```powershell
-& ".\.venv\Scripts\python.exe" ".\scripts\02_generate_meshes.py" nepali_man
+& ".\.venv\Scripts\python.exe" ".\scripts\02_generate_meshes.py" nepali_man_v2
 ```
 
 The mesh-splitting stage is run with Blender:
 
 ```powershell
-blender --background --python ".\scripts\03_split_parts.py" -- nepali_man
+blender --background --python ".\scripts\03_split_parts.py" -- nepali_man_v2
 ```
 
 For a textured figure, run the texture step before the Blender step:

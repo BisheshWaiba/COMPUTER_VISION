@@ -16,11 +16,13 @@ if platform not in ("android", "ios"):
 from kivy.app import App  # noqa: E402
 from kivy.core.window import Window  # noqa: E402
 from kivy.lang import Builder  # noqa: E402
+from kivy.properties import DictProperty, StringProperty  # noqa: E402
 from kivy.uix.screenmanager import ScreenManager, SlideTransition  # noqa: E402
 
 from app.content import load_figures  # noqa: E402
 from app.renderer import Renderer  # noqa: E402
 from app.screens import GalleryScreen, ViewerScreen  # noqa: E402
+from app.strings import FONTS, STRINGS, other  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 BACK_KEY = 27  # Android back button, Escape on a computer
@@ -28,6 +30,16 @@ BACK_KEY = 27  # Android back button, Escape on a computer
 
 class FiguresApp(App):
     title = "Figures of Nepal"
+
+    # the language on screen, and what the layout needs to draw it (see app/strings.py)
+    lang = StringProperty("en")
+    strings = DictProperty(STRINGS["en"])
+    font = StringProperty(FONTS["en"][0])
+    script = StringProperty(FONTS["en"][1])
+    # the switch button is written in the language it switches to
+    other_language = StringProperty(STRINGS["ne"]["language_name"])
+    other_font = StringProperty(FONTS["ne"][0])
+    other_script = StringProperty(FONTS["ne"][1])
 
     def build(self):
         Builder.load_file(str(ROOT / "app" / "ui.kv"))
@@ -39,10 +51,21 @@ class FiguresApp(App):
         self.viewer = ViewerScreen(name="viewer")
         self.screens.add_widget(self.gallery)
         self.screens.add_widget(self.viewer)
-        self.gallery.populate(load_figures(ROOT / "assets"))
+        self.figures = load_figures(ROOT / "assets")
+        self.gallery.populate(self.figures)
 
         Window.bind(on_keyboard=self._on_key)
         return self.screens
+
+    def toggle_language(self):
+        lang = other(self.lang)
+        self.font, self.script = FONTS[lang]
+        self.other_font, self.other_script = FONTS[self.lang]
+        self.other_language = STRINGS[self.lang]["language_name"]
+        self.strings = STRINGS[lang]
+        self.lang = lang
+        self.gallery.populate(self.figures)
+        self.viewer.refresh_language()
 
     def show_figure(self, figure):
         self.viewer.show(figure)

@@ -5,7 +5,8 @@ Run from asset_pipeline/:  .venv/Scripts/python.exe scripts/04_verify_and_write_
 For every figure this checks that
   - the .glb contains exactly the part names listed in figures_spec.py
   - Panda3D (through panda3d-gltf) loads it and can find every part by name
-and then writes the content file the app reads, plus a thumbnail per figure.
+and then writes the content file the app reads (English and Nepali text for every
+figure and part), plus a thumbnail per figure.
 """
 import json
 import sys
@@ -15,7 +16,7 @@ from PIL import Image
 from pygltflib import GLTF2
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from figures_spec import FIGURES  # noqa: E402
+from figures_spec import FIGURES, NEPALI  # noqa: E402
 
 PIPELINE = Path(__file__).resolve().parent.parent
 ASSETS = PIPELINE.parent / "assets"
@@ -26,6 +27,14 @@ loadPrcFileData("", "window-type none\naudio-library-name null")
 from direct.showbase.ShowBase import ShowBase  # noqa: E402
 
 base = ShowBase()
+
+# every figure, and every part the app can show, needs its Nepali text
+for name, spec in FIGURES.items():
+    labelled = {p["key"] for p in spec["parts"] if "label" in p}
+    translated = set(NEPALI.get(name, {}).get("parts", {}))
+    if name not in NEPALI or labelled != translated:
+        sys.exit(f"Nepali text for {name} does not match its parts: "
+                 f"missing {sorted(labelled - translated)}, extra {sorted(translated - labelled)}")
 
 content = {"figures": []}
 ok = True
@@ -53,13 +62,16 @@ for name, spec in FIGURES.items():
     thumb.parent.mkdir(parents=True, exist_ok=True)
     Image.open(front).convert("RGB").resize((512, 512), Image.LANCZOS).save(thumb)
 
+    nepali = NEPALI[name]
     content["figures"].append({
         "id": name,
-        "title": spec["title"],
+        "title": {"en": spec["title"], "ne": nepali["title"]},
         "model": f"models/{name}.glb",
         "thumbnail": f"thumbnails/{name}.png",
-        "description": spec["description"],
-        "parts": {p["key"]: {"label": p["label"], "info": p["info"]} for p in spec["parts"] if "label" in p},
+        "description": {"en": spec["description"], "ne": nepali["description"]},
+        "parts": {p["key"]: {"label": {"en": p["label"], "ne": nepali["parts"][p["key"]][0]},
+                             "info": {"en": p["info"], "ne": nepali["parts"][p["key"]][1]}}
+                  for p in spec["parts"] if "label" in p},
     })
 
 (ASSETS / "figures.json").write_text(json.dumps(content, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

@@ -1,8 +1,11 @@
-"""Single source of truth for the three figures: which raw mesh each one comes
+"""Single source of truth for the figures: which raw mesh each one comes
 from, how it is cut into named parts, and the text shown for each part.
 
 The part keys below become the node names in the exported .glb and the keys of
 the "parts" dictionary in assets/figures.json, so they always match.
+
+The English text sits with each figure and part in FIGURES. The Nepali text for
+the same figures and parts is in NEPALI at the bottom of this file.
 
 How a part is cut out
 ---------------------
@@ -115,118 +118,6 @@ FIGURES = {
                 "key": "jama", "label": "Jama (Robe)", "color": "#f4f1ea", "default": True,
                 "info": "A long-sleeved robe with a wide pleated skirt that falls to the knee, "
                         "the formal dress of the court.",
-            },
-        ],
-    },
-
-    "nepali_man": {
-        "title": "Nepali Man in Daura Suruwal",
-        "description": "A man in Daura Suruwal with a Dhaka Topi, the traditional dress of Nepali men.",
-        "raw_mesh": "nepali_man.glb",
-        "height_m": 1.70,
-        "parts": [
-            {
-                "key": "dhaka_topi", "label": "Dhaka Topi", "color": "#2d3148",
-                "info": "A cap made from Dhaka, a hand-woven patterned cotton cloth. It is taller at the "
-                        "front than the back and is a symbol of Nepali identity.",
-                "rules": [("side", [(-0.32, 0.90), (0.06, 0.825), (0.06, 1.05), (-0.32, 1.05)], ANY)],
-            },
-            {
-                "key": "head", "color": "#b9865a",
-                "rules": [("front", [(-0.125, 0.715), (0.135, 0.715), (0.15, 1.0), (-0.14, 1.0)], ANY)],
-            },
-            {
-                "key": "hands", "color": "#b9865a",
-                "rules": [("front", box(-0.245, -0.15, -0.075, -0.025), FRONT),
-                          ("front", box(0.14, -0.15, 0.26, -0.015), (0.04, 9.0))],
-            },
-            {
-                "key": "jutta", "label": "Jutta (Shoes)", "color": "#1c1c1e",
-                "info": "Plain leather shoes, the usual footwear with Daura Suruwal today.",
-                "rules": [("front", box(-1.0, -1.05, 1.0, -0.885), ANY)],
-            },
-            {
-                "key": "daura", "label": "Daura (Shirt)", "color": "#8a97a8",
-                "info": "A knee-length double-breasted shirt closed with eight ties instead of buttons. "
-                        "Its closed neck and five pleats carry traditional religious meanings.",
-                "rules": [("front", [(-0.045, 0.715), (0.135, 0.715), (0.065, 0.35), (0.025, 0.35)], (-9.0, -0.04)),
-                          ("front", [(-0.36, -0.125), (0.0, -0.125), (0.05, -0.10), (0.25, -0.10),
-                                     (0.25, -0.265), (-0.36, -0.265)], (-9.0, 0.02))],
-            },
-            {
-                "key": "suruwal", "label": "Suruwal (Trousers)", "color": "#7f8c9d",
-                "info": "Trousers that are loose at the top and narrow tightly towards the ankle.",
-                "rules": [("front", box(-1.0, -0.885, 1.0, -0.265), FRONT),
-                          ("front", [(-1.0, -0.885), (1.0, -0.885), (1.0, -0.30), (0.10, -0.30),
-                                     (-0.05, -0.40), (-1.0, -0.20)], BACK)],
-            },
-            {
-                "key": "coat", "label": "Coat", "color": "#22252b", "default": True,
-                "info": "A Western-style coat worn over the daura. It was added to the outfit in the 19th century "
-                        "and is now a standard part of formal dress.",
-            },
-        ],
-    },
-
-    "nepali_woman": {
-        "title": "Nepali Woman in Kurtha Suruwal",
-        "description": "A woman in Kurtha Suruwal with a Saal, everyday traditional dress for Nepali women.",
-        "raw_mesh": "nepali_woman_a.glb",
-        "height_m": 1.60,
-        "parts": [
-            {
-                "key": "kitab", "color": "#2b2622",
-                "rules": [("front", [(-0.155, 0.225), (0.075, 0.245), (0.095, -0.095), (-0.105, -0.095),
-                                     (-0.145, 0.0)], (-9.0, -0.165))],
-            },
-            {
-                "key": "hands", "color": "#c79a78",
-                "rules": [("front", [(-0.335, 0.215), (-0.245, 0.225), (-0.075, 0.03), (-0.095, -0.115),
-                                     (-0.205, -0.085)], (-9.0, -0.02)),
-                          ("front", [(0.255, 0.215), (0.17, 0.225), (0.06, 0.03), (0.08, -0.115),
-                                     (0.15, -0.065)], (-9.0, -0.06))],
-            },
-            {
-                "key": "saal", "label": "Saal (Shawl)", "color": "#7a1f24",
-                "info": "A long shawl draped over the shoulder. It is worn for warmth and modesty and is often "
-                        "the most decorated piece of the outfit.",
-                "rules": [("front", [(-0.345, 0.70), (-0.12, 0.735), (-0.10, 0.45), (-0.115, 0.22),
-                                     (-0.27, 0.22), (-0.27, 0.50), (-0.345, 0.58)], (-9.0, 0.05)),
-                          ("front", [(-0.39, 0.02), (-0.245, 0.10), (-0.135, -0.02), (-0.12, -0.30),
-                                     (-0.11, -0.56), (-0.20, -0.60), (-0.20, -0.93), (-0.33, -0.93),
-                                     (-0.43, -0.56)], (-9.0, 0.05)),
-                          ("front", [(-0.08, 0.705), (-0.335, 0.69), (-0.30, 0.46), (-0.26, 0.46), (-0.26, 0.09),
-                                     (-0.40, 0.04), (-0.43, -0.50),
-                                     (-0.34, -0.93), (-0.08, -0.93), (0.04, -0.86), (0.0, -0.60),
-                                     (-0.10, -0.30), (-0.10, 0.30)], (0.08, 9.0))],
-            },
-            {
-                "key": "head", "color": "#c79a78",
-                "rules": [("front", [(-0.125, 0.715), (0.04, 0.715), (0.085, 0.82), (0.06, 0.93),
-                                     (-0.11, 0.93), (-0.155, 0.82)], (-9.0, -0.02)),
-                          ("front", box(-0.10, 0.62, 0.02, 0.72), (-9.0, -0.02))],
-            },
-            {
-                "key": "hair", "color": "#5a3d28",
-                "rules": [("front", box(-0.22, 0.70, 0.17, 1.05), ANY),
-                          ("front", [(0.0, 0.72), (0.14, 0.76), (0.13, 0.55), (0.095, 0.41),
-                                     (0.035, 0.41), (0.0, 0.60)], (-9.0, -0.02))],
-            },
-            {
-                "key": "feet", "color": "#c79a78",
-                "rules": [("front", box(-1.0, -1.05, 1.0, -0.875), ANY)],
-            },
-            {
-                "key": "suruwal", "label": "Suruwal (Trousers)", "color": "#6e1a1e",
-                "info": "Trousers worn under the kurtha, gathered or fitted closely at the ankle.",
-                "rules": [("front", [(-0.21, -0.56), (-0.12, -0.51), (-0.025, -0.325), (0.035, -0.325),
-                                     (0.125, -0.505), (0.23, -0.505), (0.5, -1.0), (-0.4, -1.0)], FRONT),
-                          ("front", box(-1.0, -1.05, 1.0, -0.465), BACK)],
-            },
-            {
-                "key": "kurtha", "label": "Kurtha (Tunic)", "color": "#23201f", "default": True,
-                "info": "A long tunic that reaches the knee, with slits at the sides so the wearer can move "
-                        "freely. It is worn over the suruwal.",
             },
         ],
     },
@@ -410,5 +301,86 @@ FIGURES = {
                         "Bright floral prints like this one are typical.",
             },
         ],
+    },
+}
+
+
+# Nepali text: figure -> title, description, and (label, info) for every part that has a
+# label in FIGURES. 04_verify_and_write_content.py refuses to run if an entry is missing.
+# The app's Devanagari font has no Latin letters, so do not use any here.
+NEPALI = {
+    "prithvi_narayan_shah": {
+        "title": "पृथ्वीनारायण शाह",
+        "description": "गोरखाका राजा, जसले अठारौँ शताब्दीमा नेपाल एकीकरणको सुरुवात गरे। "
+                       "यहाँ उनलाई एउटा औँला उठाएको परिचित मुद्रामा देखाइएको छ।",
+        "parts": {
+            "khukuri": ("खुकुरी",
+                        "गोर्खाली सिपाहीको बाङ्गो धार भएको हतियार, जुन कम्मरको पटुकामा सिउरिन्छ। यो दैनिक "
+                        "काममा र हतियार दुवैको रूपमा प्रयोग हुन्थ्यो र आज पनि नेपालको राष्ट्रिय प्रतीक मानिन्छ।"),
+            "tarwar": ("तरवार",
+                       "देब्रे हातमा टुप्पो तलतिर पारेर समातिएको लामो, बाङ्गो तरवार। एकीकरण अभियानका बेला "
+                       "गोर्खाली सेनापतिहरूले यस्ता तरवार बोक्थे।"),
+            "dhal": ("ढाल",
+                     "छाला वा धातुबाट बनेको गोलो ढाल, जसमा उठेका बुट्टा हुन्छन्। यो कम्मरमा भिरिन्थ्यो र "
+                     "तरवारसँगै प्रयोग गरिन्थ्यो।"),
+            "shripech": ("श्रीपेच",
+                         "शाह राजाहरूको रत्नजडित राजमुकुट, जसको टुप्पोमा स्वर्गचरीको प्वाँखको कल्की हुन्छ।"),
+            "mala": ("माला",
+                     "घाँटीमा लगाइने माला। पृथ्वीनारायण शाहको जन्मजयन्ती अर्थात् पृथ्वी जयन्तीका दिन उनका "
+                     "सालिकमा सयपत्री फूलको माला लगाइन्छ।"),
+            "patuka": ("पटुका",
+                       "जामामाथि कम्मरमा बेरिने लामो कपडा। यसले खुकुरीलाई अड्याउँछ र ढाडलाई टेवा दिन्छ।"),
+            "jutta": ("जुत्ता",
+                      "टुप्पो माथितिर फर्केको चुच्चे छालाको जुत्ता, जुन त्यस समयमा दरबारमा लगाइन्थ्यो।"),
+            "suruwal": ("सुरुवाल",
+                        "जामाभित्र लगाइने कसिलो सुरुवाल, जुन घुँडादेखि गोलीगाँठोसम्म कसिएको हुन्छ।"),
+            "jama": ("जामा",
+                     "लामो बाहुला र घुँडासम्म आउने, चुन्ने परेको फराकिलो घेरा भएको पोसाक। यो दरबारको "
+                     "औपचारिक पहिरन थियो।"),
+        },
+    },
+    "nepali_man_v2": {
+        "title": "इस्टकोट र ढाका टोपीमा नेपाली पुरुष",
+        "description": "दौरा सुरुवालमाथि बुट्टेदार इस्टकोट र ढाका टोपी लगाएका पुरुष।",
+        "parts": {
+            "dhaka_topi": ("ढाका टोपी",
+                           "हातले बुनेको बुट्टेदार ढाका कपडाबाट बनेको टोपी। यो अगाडि अग्लो र पछाडि होचो "
+                           "हुन्छ र नेपाली पहिचानको प्रतीक मानिन्छ।"),
+            "istakot": ("इस्टकोट",
+                        "दौरामाथि लगाइने बाहुला नभएको कोट। यो ढाका शैलीको बुट्टेदार कपडाबाट बनेको छ, "
+                        "जसमा यस कपडाको चिनारी मानिने हीरा आकारका बुट्टा छन्।"),
+            "shoes": ("जुत्ता",
+                      "कालो छालाको सादा जुत्ता, जुन आजकल दौरा सुरुवालसँग प्रायः लगाइन्छ।"),
+            "suruwal": ("सुरुवाल",
+                        "दौरासँग लगाइने सुरुवाल, जुन परम्परागत रूपमा माथि खुकुलो र गोलीगाँठोतिर साँघुरो हुन्छ। "
+                        "यहाँ यो सिधा काटिएको छ र मोहोतामा ढाका बुट्टाको पट्टी छ।"),
+            "daura": ("दौरा",
+                      "घुँडासम्म आउने पोसाक, जसको अगाडिका पल्ला एकमाथि अर्को खप्टिन्छन् र छेउमा तुनाले "
+                      "बाँधिन्छन्। यो सुरुवालमाथि र इस्टकोटभित्र लगाइन्छ।"),
+        },
+    },
+    "nepali_woman_v2": {
+        "title": "गुन्यू चोलोमा नेपाली महिला",
+        "description": "गुन्यू चोलो, पटुका, पोते र सुनका गहनामा सजिएकी, नमस्ते गरिरहेकी महिला।",
+        "parts": {
+            "shirbandi": ("शिरबन्दी",
+                          "निधार र सिउँदोमा लगाइने सुनको गहना, जुन प्रायः चाडपर्व र उत्सवमा लगाइन्छ।"),
+            "kantha": ("कण्ठा",
+                       "घाँटीमा कसिलो गरी लगाइने सुनका दानाको गह्रौँ माला। यसमुनि छातीमा लामा मालाहरू "
+                       "झुन्डिएका छन्।"),
+            "chura": ("चुरा",
+                      "दुवै नाडीमा लगाइएका चुराका लहर, यहाँ रातो र सुनौलो रङमा।"),
+            "pote": ("पोते",
+                     "ससाना काँचका दानाका धेरै लहर, यहाँ हरियो रङमा, एउटा काँधबाट अर्कोतिरको कम्मरसम्म "
+                     "छड्के पारेर लगाइएको। पोते परम्परागत रूपमा विवाहित महिलाको चिनो मानिन्छ।"),
+            "patuka": ("पटुका",
+                       "कम्मरमा धेरै फेरो बेरिने लामो कपडा। यसले गुन्यूलाई अड्याउँछ र काम गर्दा ढाडलाई "
+                       "टेवा दिन्छ।"),
+            "cholo": ("चोलो",
+                      "जिउमा ठिक्क मिल्ने चोलो, यहाँ रातो मखमलको, छोटा बाहुलामा सुनौलो किनारा भएको।"),
+            "gunyu": ("गुन्यू",
+                      "छापिएको सुती कपडा, जुन शरीरको तल्लो भागमा बेरेर कम्मरमा सिउरिन्छ। यस्ता चहकिला "
+                      "फूलबुट्टे छाप धेरै प्रचलित छन्।"),
+        },
     },
 }

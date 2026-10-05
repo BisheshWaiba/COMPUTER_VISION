@@ -7,6 +7,8 @@
 #:set LINE (0.86, 0.84, 0.80, 1)
 
 <WrapLabel@Label>:
+    font_name: app.font
+    font_script_name: app.script
     size_hint_y: None
     height: self.texture_size[1]
     text_size: self.width, None
@@ -56,7 +58,7 @@
             font_size: "13sp"
             color: MUTED
         WrapLabel:
-            text: "{} parts to explore".format(root.parts_count)
+            text: root.parts_text
             font_size: "12sp"
             bold: True
             color: ACCENT
@@ -72,19 +74,25 @@
     BoxLayout:
         orientation: "vertical"
         BoxLayout:
-            orientation: "vertical"
             size_hint_y: None
             height: self.minimum_height
-            padding: dp(20), dp(28), dp(20), dp(12)
-            spacing: dp(4)
-            WrapLabel:
-                text: "Figures of Nepal"
-                bold: True
-                font_size: "28sp"
-            WrapLabel:
-                text: "Choose a figure to explore it in 3D."
-                font_size: "14sp"
-                color: MUTED
+            padding: dp(20), dp(28), dp(16), dp(12)
+            spacing: dp(8)
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(4)
+                WrapLabel:
+                    text: app.strings["app_title"]
+                    bold: True
+                    font_size: "28sp"
+                WrapLabel:
+                    text: app.strings["app_subtitle"]
+                    font_size: "14sp"
+                    color: MUTED
+            LangButton:
+                pos_hint: {"top": 1}
         ScrollView:
             do_scroll_x: False
             bar_width: 0
@@ -113,7 +121,33 @@
             joint: "round"
 
 
+<LangButton>:
+    size_hint: None, None
+    size: self.texture_size[0] + dp(28), dp(34)
+    text: app.other_language
+    font_name: app.other_font
+    font_script_name: app.other_script
+    font_size: "13sp"
+    bold: True
+    color: ACCENT
+    on_release: app.toggle_language()
+    canvas.before:
+        Color:
+            rgba: PRESSED if self.state == "down" else CARD
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [self.height / 2]
+        Color:
+            rgba: LINE
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, self.height / 2
+            width: 1
+
+
 <Chip>:
+    font_name: app.font
+    font_script_name: app.script
     size_hint_x: None
     width: self.texture_size[0] + dp(28)
     font_size: "14sp"
@@ -155,6 +189,8 @@
         height: dp(40)
         Label:
             text: root.title
+            font_name: app.font
+            font_script_name: app.script
             bold: True
             font_size: "17sp"
             color: ACCENT
@@ -195,13 +231,16 @@
         BoxLayout:
             size_hint_y: None
             height: dp(56)
-            padding: dp(4), 0, dp(16), 0
+            padding: dp(4), 0, dp(12), 0
+            spacing: dp(8)
             BackButton:
                 size_hint_x: None
                 width: dp(48)
                 on_release: app.show_gallery()
             Label:
                 text: root.title
+                font_name: app.font
+                font_script_name: app.script
                 bold: True
                 font_size: "18sp"
                 color: INK
@@ -210,19 +249,25 @@
                 valign: "middle"
                 shorten: True
                 shorten_from: "right"
+            LangButton:
+                pos_hint: {"center_y": 0.5}
         FloatLayout:
             Model3DView:
                 id: view
                 pos_hint: {"x": 0, "y": 0}
                 on_pick: root.on_pick(args[1])
             Label:
-                text: root.status
+                text: app.strings["loading"]
+                font_name: app.font
+                font_script_name: app.script
                 pos_hint: {"x": 0, "y": 0}
                 color: MUTED
                 font_size: "14sp"
                 opacity: 0 if view.has_frame else 1
             Label:
-                text: "Drag to rotate  ·  Pinch to zoom  ·  Tap a part"
+                text: app.strings["hint"]
+                font_name: app.font
+                font_script_name: app.script
                 size_hint: 1, None
                 height: dp(28)
                 pos_hint: {"x": 0, "top": 1}

@@ -2,162 +2,256 @@
   "figures": [
     {
       "id": "prithvi_narayan_shah",
-      "title": "Prithvi Narayan Shah",
+      "title": {
+        "en": "Prithvi Narayan Shah",
+        "ne": "पृथ्वीनारायण शाह"
+      },
       "model": "models/prithvi_narayan_shah.glb",
       "thumbnail": "thumbnails/prithvi_narayan_shah.png",
-      "description": "King of Gorkha who began the unification of Nepal in the 18th century, shown in his best-known pose with one finger raised.",
+      "description": {
+        "en": "King of Gorkha who began the unification of Nepal in the 18th century, shown in his best-known pose with one finger raised.",
+        "ne": "गोरखाका राजा, जसले अठारौँ शताब्दीमा नेपाल एकीकरणको सुरुवात गरे। यहाँ उनलाई एउटा औँला उठाएको परिचित मुद्रामा देखाइएको छ।"
+      },
       "parts": {
         "khukuri": {
-          "label": "Khukuri",
-          "info": "The curved knife of the Gorkhali soldier, carried tucked into the waist sash. It served as both an everyday tool and a weapon, and remains a national symbol of Nepal."
+          "label": {
+            "en": "Khukuri",
+            "ne": "खुकुरी"
+          },
+          "info": {
+            "en": "The curved knife of the Gorkhali soldier, carried tucked into the waist sash. It served as both an everyday tool and a weapon, and remains a national symbol of Nepal.",
+            "ne": "गोर्खाली सिपाहीको बाङ्गो धार भएको हतियार, जुन कम्मरको पटुकामा सिउरिन्छ। यो दैनिक काममा र हतियार दुवैको रूपमा प्रयोग हुन्थ्यो र आज पनि नेपालको राष्ट्रिय प्रतीक मानिन्छ।"
+          }
         },
         "tarwar": {
-          "label": "Tarwar (Sword)",
-          "info": "A long curved sword held point-down in the left hand. Swords like this were carried by Gorkhali commanders during the unification campaigns."
+          "label": {
+            "en": "Tarwar (Sword)",
+            "ne": "तरवार"
+          },
+          "info": {
+            "en": "A long curved sword held point-down in the left hand. Swords like this were carried by Gorkhali commanders during the unification campaigns.",
+            "ne": "देब्रे हातमा टुप्पो तलतिर पारेर समातिएको लामो, बाङ्गो तरवार। एकीकरण अभियानका बेला गोर्खाली सेनापतिहरूले यस्ता तरवार बोक्थे।"
+          }
         },
         "dhal": {
-          "label": "Dhal (Shield)",
-          "info": "A round shield, traditionally made of hide or metal with raised bosses, worn at the hip and used together with the sword."
+          "label": {
+            "en": "Dhal (Shield)",
+            "ne": "ढाल"
+          },
+          "info": {
+            "en": "A round shield, traditionally made of hide or metal with raised bosses, worn at the hip and used together with the sword.",
+            "ne": "छाला वा धातुबाट बनेको गोलो ढाल, जसमा उठेका बुट्टा हुन्छन्। यो कम्मरमा भिरिन्थ्यो र तरवारसँगै प्रयोग गरिन्थ्यो।"
+          }
         },
         "shripech": {
-          "label": "Shripech (Crown)",
-          "info": "The jewelled royal crown of the Shah kings, topped with a plume of bird-of-paradise feathers."
+          "label": {
+            "en": "Shripech (Crown)",
+            "ne": "श्रीपेच"
+          },
+          "info": {
+            "en": "The jewelled royal crown of the Shah kings, topped with a plume of bird-of-paradise feathers.",
+            "ne": "शाह राजाहरूको रत्नजडित राजमुकुट, जसको टुप्पोमा स्वर्गचरीको प्वाँखको कल्की हुन्छ।"
+          }
         },
         "mala": {
-          "label": "Mala (Garland)",
-          "info": "A garland worn around the neck. Statues of Prithvi Narayan Shah are garlanded with marigolds on Prithvi Jayanti, the day that marks his birth."
+          "label": {
+            "en": "Mala (Garland)",
+            "ne": "माला"
+          },
+          "info": {
+            "en": "A garland worn around the neck. Statues of Prithvi Narayan Shah are garlanded with marigolds on Prithvi Jayanti, the day that marks his birth.",
+            "ne": "घाँटीमा लगाइने माला। पृथ्वीनारायण शाहको जन्मजयन्ती अर्थात् पृथ्वी जयन्तीका दिन उनका सालिकमा सयपत्री फूलको माला लगाइन्छ।"
+          }
         },
         "patuka": {
-          "label": "Patuka (Waist Sash)",
-          "info": "A long cloth wound around the waist over the robe. It holds the khukuri in place and supports the back."
+          "label": {
+            "en": "Patuka (Waist Sash)",
+            "ne": "पटुका"
+          },
+          "info": {
+            "en": "A long cloth wound around the waist over the robe. It holds the khukuri in place and supports the back.",
+            "ne": "जामामाथि कम्मरमा बेरिने लामो कपडा। यसले खुकुरीलाई अड्याउँछ र ढाडलाई टेवा दिन्छ।"
+          }
         },
         "jutta": {
-          "label": "Jutta (Shoes)",
-          "info": "Leather shoes with upturned, pointed toes, a style worn at court in the period."
+          "label": {
+            "en": "Jutta (Shoes)",
+            "ne": "जुत्ता"
+          },
+          "info": {
+            "en": "Leather shoes with upturned, pointed toes, a style worn at court in the period.",
+            "ne": "टुप्पो माथितिर फर्केको चुच्चे छालाको जुत्ता, जुन त्यस समयमा दरबारमा लगाइन्थ्यो।"
+          }
         },
         "suruwal": {
-          "label": "Suruwal (Trousers)",
-          "info": "Close-fitting trousers worn under the robe, tight from the knee down to the ankle."
+          "label": {
+            "en": "Suruwal (Trousers)",
+            "ne": "सुरुवाल"
+          },
+          "info": {
+            "en": "Close-fitting trousers worn under the robe, tight from the knee down to the ankle.",
+            "ne": "जामाभित्र लगाइने कसिलो सुरुवाल, जुन घुँडादेखि गोलीगाँठोसम्म कसिएको हुन्छ।"
+          }
         },
         "jama": {
-          "label": "Jama (Robe)",
-          "info": "A long-sleeved robe with a wide pleated skirt that falls to the knee, the formal dress of the court."
-        }
-      }
-    },
-    {
-      "id": "nepali_man",
-      "title": "Nepali Man in Daura Suruwal",
-      "model": "models/nepali_man.glb",
-      "thumbnail": "thumbnails/nepali_man.png",
-      "description": "A man in Daura Suruwal with a Dhaka Topi, the traditional dress of Nepali men.",
-      "parts": {
-        "dhaka_topi": {
-          "label": "Dhaka Topi",
-          "info": "A cap made from Dhaka, a hand-woven patterned cotton cloth. It is taller at the front than the back and is a symbol of Nepali identity."
-        },
-        "jutta": {
-          "label": "Jutta (Shoes)",
-          "info": "Plain leather shoes, the usual footwear with Daura Suruwal today."
-        },
-        "daura": {
-          "label": "Daura (Shirt)",
-          "info": "A knee-length double-breasted shirt closed with eight ties instead of buttons. Its closed neck and five pleats carry traditional religious meanings."
-        },
-        "suruwal": {
-          "label": "Suruwal (Trousers)",
-          "info": "Trousers that are loose at the top and narrow tightly towards the ankle."
-        },
-        "coat": {
-          "label": "Coat",
-          "info": "A Western-style coat worn over the daura. It was added to the outfit in the 19th century and is now a standard part of formal dress."
-        }
-      }
-    },
-    {
-      "id": "nepali_woman",
-      "title": "Nepali Woman in Kurtha Suruwal",
-      "model": "models/nepali_woman.glb",
-      "thumbnail": "thumbnails/nepali_woman.png",
-      "description": "A woman in Kurtha Suruwal with a Saal, everyday traditional dress for Nepali women.",
-      "parts": {
-        "saal": {
-          "label": "Saal (Shawl)",
-          "info": "A long shawl draped over the shoulder. It is worn for warmth and modesty and is often the most decorated piece of the outfit."
-        },
-        "suruwal": {
-          "label": "Suruwal (Trousers)",
-          "info": "Trousers worn under the kurtha, gathered or fitted closely at the ankle."
-        },
-        "kurtha": {
-          "label": "Kurtha (Tunic)",
-          "info": "A long tunic that reaches the knee, with slits at the sides so the wearer can move freely. It is worn over the suruwal."
+          "label": {
+            "en": "Jama (Robe)",
+            "ne": "जामा"
+          },
+          "info": {
+            "en": "A long-sleeved robe with a wide pleated skirt that falls to the knee, the formal dress of the court.",
+            "ne": "लामो बाहुला र घुँडासम्म आउने, चुन्ने परेको फराकिलो घेरा भएको पोसाक। यो दरबारको औपचारिक पहिरन थियो।"
+          }
         }
       }
     },
     {
       "id": "nepali_man_v2",
-      "title": "Nepali Man with Istakot and Dhaka Topi",
+      "title": {
+        "en": "Nepali Man with Istakot and Dhaka Topi",
+        "ne": "इस्टकोट र ढाका टोपीमा नेपाली पुरुष"
+      },
       "model": "models/nepali_man_v2.glb",
       "thumbnail": "thumbnails/nepali_man_v2.png",
-      "description": "A man in Daura Suruwal, wearing a patterned Istakot (waistcoat) and a Dhaka Topi.",
+      "description": {
+        "en": "A man in Daura Suruwal, wearing a patterned Istakot (waistcoat) and a Dhaka Topi.",
+        "ne": "दौरा सुरुवालमाथि बुट्टेदार इस्टकोट र ढाका टोपी लगाएका पुरुष।"
+      },
       "parts": {
         "dhaka_topi": {
-          "label": "Dhaka Topi",
-          "info": "A cap cut from Dhaka, a hand-woven patterned cloth. It is taller at the front than at the back and is a symbol of Nepali identity."
+          "label": {
+            "en": "Dhaka Topi",
+            "ne": "ढाका टोपी"
+          },
+          "info": {
+            "en": "A cap cut from Dhaka, a hand-woven patterned cloth. It is taller at the front than at the back and is a symbol of Nepali identity.",
+            "ne": "हातले बुनेको बुट्टेदार ढाका कपडाबाट बनेको टोपी। यो अगाडि अग्लो र पछाडि होचो हुन्छ र नेपाली पहिचानको प्रतीक मानिन्छ।"
+          }
         },
         "istakot": {
-          "label": "Istakot (Waistcoat)",
-          "info": "A sleeveless waistcoat worn over the daura. This one is cut from patterned Dhaka-style cloth, with the diamond motifs the fabric is known for."
+          "label": {
+            "en": "Istakot (Waistcoat)",
+            "ne": "इस्टकोट"
+          },
+          "info": {
+            "en": "A sleeveless waistcoat worn over the daura. This one is cut from patterned Dhaka-style cloth, with the diamond motifs the fabric is known for.",
+            "ne": "दौरामाथि लगाइने बाहुला नभएको कोट। यो ढाका शैलीको बुट्टेदार कपडाबाट बनेको छ, जसमा यस कपडाको चिनारी मानिने हीरा आकारका बुट्टा छन्।"
+          }
         },
         "shoes": {
-          "label": "Shoes",
-          "info": "Plain black leather shoes, now the usual footwear with Daura Suruwal."
+          "label": {
+            "en": "Shoes",
+            "ne": "जुत्ता"
+          },
+          "info": {
+            "en": "Plain black leather shoes, now the usual footwear with Daura Suruwal.",
+            "ne": "कालो छालाको सादा जुत्ता, जुन आजकल दौरा सुरुवालसँग प्रायः लगाइन्छ।"
+          }
         },
         "suruwal": {
-          "label": "Suruwal (Trousers)",
-          "info": "Trousers worn with the daura, traditionally loose at the top and narrowing towards the ankle. Here they are cut straight, with a band of the Dhaka pattern at each cuff."
+          "label": {
+            "en": "Suruwal (Trousers)",
+            "ne": "सुरुवाल"
+          },
+          "info": {
+            "en": "Trousers worn with the daura, traditionally loose at the top and narrowing towards the ankle. Here they are cut straight, with a band of the Dhaka pattern at each cuff.",
+            "ne": "दौरासँग लगाइने सुरुवाल, जुन परम्परागत रूपमा माथि खुकुलो र गोलीगाँठोतिर साँघुरो हुन्छ। यहाँ यो सिधा काटिएको छ र मोहोतामा ढाका बुट्टाको पट्टी छ।"
+          }
         },
         "daura": {
-          "label": "Daura (Shirt)",
-          "info": "A knee-length shirt with a crossed front that closes with ties at the side. It is worn over the suruwal and under the waistcoat."
+          "label": {
+            "en": "Daura (Shirt)",
+            "ne": "दौरा"
+          },
+          "info": {
+            "en": "A knee-length shirt with a crossed front that closes with ties at the side. It is worn over the suruwal and under the waistcoat.",
+            "ne": "घुँडासम्म आउने पोसाक, जसको अगाडिका पल्ला एकमाथि अर्को खप्टिन्छन् र छेउमा तुनाले बाँधिन्छन्। यो सुरुवालमाथि र इस्टकोटभित्र लगाइन्छ।"
+          }
         }
       }
     },
     {
       "id": "nepali_woman_v2",
-      "title": "Nepali Woman in Gunyu Cholo",
+      "title": {
+        "en": "Nepali Woman in Gunyu Cholo",
+        "ne": "गुन्यू चोलोमा नेपाली महिला"
+      },
       "model": "models/nepali_woman_v2.glb",
       "thumbnail": "thumbnails/nepali_woman_v2.png",
-      "description": "A woman in Gunyu Cholo with a Patuka, Pote and gold jewellery, greeting with a namaste.",
+      "description": {
+        "en": "A woman in Gunyu Cholo with a Patuka, Pote and gold jewellery, greeting with a namaste.",
+        "ne": "गुन्यू चोलो, पटुका, पोते र सुनका गहनामा सजिएकी, नमस्ते गरिरहेकी महिला।"
+      },
       "parts": {
         "shirbandi": {
-          "label": "Shirbandi (Head Ornament)",
-          "info": "A gold ornament worn across the forehead and along the parting of the hair, usually on festive occasions."
+          "label": {
+            "en": "Shirbandi (Head Ornament)",
+            "ne": "शिरबन्दी"
+          },
+          "info": {
+            "en": "A gold ornament worn across the forehead and along the parting of the hair, usually on festive occasions.",
+            "ne": "निधार र सिउँदोमा लगाइने सुनको गहना, जुन प्रायः चाडपर्व र उत्सवमा लगाइन्छ।"
+          }
         },
         "kantha": {
-          "label": "Kantha (Gold Necklace)",
-          "info": "A heavy necklace of gold beads worn close around the neck. Longer strands of beads hang below it on the chest."
+          "label": {
+            "en": "Kantha (Gold Necklace)",
+            "ne": "कण्ठा"
+          },
+          "info": {
+            "en": "A heavy necklace of gold beads worn close around the neck. Longer strands of beads hang below it on the chest.",
+            "ne": "घाँटीमा कसिलो गरी लगाइने सुनका दानाको गह्रौँ माला। यसमुनि छातीमा लामा मालाहरू झुन्डिएका छन्।"
+          }
         },
         "chura": {
-          "label": "Chura (Bangles)",
-          "info": "Stacks of bangles worn on both wrists, here in red and gold."
+          "label": {
+            "en": "Chura (Bangles)",
+            "ne": "चुरा"
+          },
+          "info": {
+            "en": "Stacks of bangles worn on both wrists, here in red and gold.",
+            "ne": "दुवै नाडीमा लगाइएका चुराका लहर, यहाँ रातो र सुनौलो रङमा।"
+          }
         },
         "pote": {
-          "label": "Pote (Bead Strands)",
-          "info": "Many strands of small glass beads, here in green, worn like a sash from one shoulder to the opposite hip. Pote is traditionally a sign of a married woman."
+          "label": {
+            "en": "Pote (Bead Strands)",
+            "ne": "पोते"
+          },
+          "info": {
+            "en": "Many strands of small glass beads, here in green, worn like a sash from one shoulder to the opposite hip. Pote is traditionally a sign of a married woman.",
+            "ne": "ससाना काँचका दानाका धेरै लहर, यहाँ हरियो रङमा, एउटा काँधबाट अर्कोतिरको कम्मरसम्म छड्के पारेर लगाइएको। पोते परम्परागत रूपमा विवाहित महिलाको चिनो मानिन्छ।"
+          }
         },
         "patuka": {
-          "label": "Patuka (Waistband)",
-          "info": "A long cloth wound several times around the waist. It holds the skirt in place and supports the back during work."
+          "label": {
+            "en": "Patuka (Waistband)",
+            "ne": "पटुका"
+          },
+          "info": {
+            "en": "A long cloth wound several times around the waist. It holds the skirt in place and supports the back during work.",
+            "ne": "कम्मरमा धेरै फेरो बेरिने लामो कपडा। यसले गुन्यूलाई अड्याउँछ र काम गर्दा ढाडलाई टेवा दिन्छ।"
+          }
         },
         "cholo": {
-          "label": "Cholo (Blouse)",
-          "info": "A fitted blouse, here in red velvet with gold trim on the short sleeves."
+          "label": {
+            "en": "Cholo (Blouse)",
+            "ne": "चोलो"
+          },
+          "info": {
+            "en": "A fitted blouse, here in red velvet with gold trim on the short sleeves.",
+            "ne": "जिउमा ठिक्क मिल्ने चोलो, यहाँ रातो मखमलको, छोटा बाहुलामा सुनौलो किनारा भएको।"
+          }
         },
         "gunyu": {
-          "label": "Gunyu (Wrap Skirt)",
-          "info": "A length of printed cotton wrapped around the lower body and tucked in at the waist. Bright floral prints like this one are typical."
+          "label": {
+            "en": "Gunyu (Wrap Skirt)",
+            "ne": "गुन्यू"
+          },
+          "info": {
+            "en": "A length of printed cotton wrapped around the lower body and tucked in at the waist. Bright floral prints like this one are typical.",
+            "ne": "छापिएको सुती कपडा, जुन शरीरको तल्लो भागमा बेरेर कम्मरमा सिउरिन्छ। यस्ता चहकिला फूलबुट्टे छाप धेरै प्रचलित छन्।"
+          }
         }
       }
     }
