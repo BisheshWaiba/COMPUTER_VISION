@@ -1,7 +1,8 @@
 # Credits and licences
 
-The three models were generated from the pictures below with Hunyuan3D-2
+The models were generated from the pictures below with Hunyuan3D-2
 (shape model only) and then split into named parts in Blender.
+The fourth figure is also painted from its reference photograph.
 
 ## Source pictures (Wikimedia Commons)
 
@@ -10,6 +11,7 @@ The three models were generated from the pictures below with Hunyuan3D-2
 | Prithvi Narayan Shah | [The Great King Prithivi Narayan Shah.jpg](https://commons.wikimedia.org/wiki/File:The_Great_King_Prithivi_Narayan_Shah.jpg) | GB Ryan771 | CC BY-SA 4.0 |
 | Nepali man | [Dhakatopinepalidress.jpg](https://commons.wikimedia.org/wiki/File:Dhakatopinepalidress.jpg) | Ak479726 | CC BY-SA 4.0 |
 | Nepali woman | [Girl in salwar kameez.jpg](https://commons.wikimedia.org/wiki/File:Girl_in_salwar_kameez.jpg) | Samantha McNamara | CC BY 2.0 |
+| Nepali man with Istakot and Dhaka Topi | Reference photograph supplied by the project owner, who has confirmed they hold the rights to use it | n/a | n/a |
 
 The CC BY-SA pictures require attribution and that derived works are shared
 under the same licence.

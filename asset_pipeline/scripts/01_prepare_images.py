@@ -19,6 +19,7 @@ JOBS = {
     "prithvi_narayan_shah": ("pns_statue.jpg", (0.10, 0.02, 0.72, 0.905), "birefnet-general"),
     "prithvi_narayan_shah_painting": ("pns_painting.jpg", (0.15, 0.02, 0.85, 1.0), "birefnet-general"),
     "nepali_man": ("man_daura.jpg", (0.33, 0.34, 0.70, 0.65), "birefnet-general"),
+    "nepali_man_v2": ("man_vest.jpg", (0.0, 0.0, 1.0, 1.0), "birefnet-general"),
     "nepali_woman_a": ("woman_kurtha_a.jpg", (0.18, 0.10, 0.82, 1.0), "birefnet-general"),
     "nepali_woman_b": ("woman_kurtha_b.jpg", (0.08, 0.13, 0.76, 0.97), "birefnet-general"),
 }

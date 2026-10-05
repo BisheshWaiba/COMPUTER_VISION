@@ -94,6 +94,35 @@
           "info": "A long tunic that reaches the knee, with slits at the sides so the wearer can move freely. It is worn over the suruwal."
         }
       }
+    },
+    {
+      "id": "nepali_man_v2",
+      "title": "Nepali Man with Istakot and Dhaka Topi",
+      "model": "models/nepali_man_v2.glb",
+      "thumbnail": "thumbnails/nepali_man_v2.png",
+      "description": "A man in Daura Suruwal, wearing a patterned Istakot (waistcoat) and a Dhaka Topi.",
+      "parts": {
+        "dhaka_topi": {
+          "label": "Dhaka Topi",
+          "info": "A cap cut from Dhaka, a hand-woven patterned cloth. It is taller at the front than at the back and is a symbol of Nepali identity."
+        },
+        "istakot": {
+          "label": "Istakot (Waistcoat)",
+          "info": "A sleeveless waistcoat worn over the daura. This one is cut from patterned Dhaka-style cloth, with the diamond motifs the fabric is known for."
+        },
+        "shoes": {
+          "label": "Shoes",
+          "info": "Plain black leather shoes, now the usual footwear with Daura Suruwal."
+        },
+        "suruwal": {
+          "label": "Suruwal (Trousers)",
+          "info": "Trousers worn with the daura, traditionally loose at the top and narrowing towards the ankle. Here they are cut straight, with a band of the Dhaka pattern at each cuff."
+        },
+        "daura": {
+          "label": "Daura (Shirt)",
+          "info": "A knee-length shirt with a crossed front that closes with ties at the side. It is worn over the suruwal and under the waistcoat."
+        }
+      }
     }
   ]
 }

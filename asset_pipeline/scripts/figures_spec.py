@@ -230,4 +230,71 @@ FIGURES = {
             },
         ],
     },
+
+    # Painted from a reference photograph instead of flat colours: see 05_prepare_texture.py.
+    # Per part, "back" says how to colour faces the photo cannot see (the back of the figure):
+    #   "project"  reuse the photo, "#rrggbb" a fixed colour, "flat" the typical colour of
+    #   "swatch_box" (x0, z0, x1, z1, in raw-mesh coordinates). "back_bands" lists height
+    #   ranges (z0, z1) where the photo is reused anyway, for trim that runs round the garment.
+    "nepali_man_v2": {
+        "title": "Nepali Man with Istakot and Dhaka Topi",
+        "description": "A man in Daura Suruwal, wearing a patterned Istakot (waistcoat) and a Dhaka Topi.",
+        "raw_mesh": "nepali_man_v2.glb",
+        "height_m": 1.72,
+        "texture": {"photo": "man_vest.jpg"},
+        "parts": [
+            {
+                "key": "dhaka_topi", "label": "Dhaka Topi", "color": "#b5455a", "back": "project",
+                "back_remap": [((-1.0, 0.70, 1.0, 1.2), 0.0, 0.05)],
+                "info": "A cap cut from Dhaka, a hand-woven patterned cloth. It is taller at the front than "
+                        "at the back and is a symbol of Nepali identity.",
+                "rules": [("front", box(-0.25, 0.835, 0.25, 1.10), ANY)],
+            },
+            {
+                "key": "hands", "color": "#b98a68", "back": "project",
+                "rules": [("front", box(-0.32, -0.24, -0.19, -0.07), (-0.16, 0.04)),
+                          ("front", box(0.17, -0.24, 0.29, -0.07), (-0.16, 0.04))],
+            },
+            {
+                "key": "neck", "color": "#b98a68", "back": "#b78864",
+                "rules": [("front", box(-0.17, 0.645, 0.15, 0.74), ANY)],
+            },
+            {
+                "key": "head", "color": "#b98a68", "back": "#241c1a",
+                "rules": [("front", box(-0.17, 0.74, 0.15, 0.835), ANY)],
+            },
+            {
+                "key": "istakot", "label": "Istakot (Waistcoat)", "color": "#a02b3a", "back": "project",
+                "back_remap": [((-0.12, 0.44, 0.12, 0.66), 0.105, -0.20)],
+                "info": "A sleeveless waistcoat worn over the daura. This one is cut from patterned Dhaka-style "
+                        "cloth, with the diamond motifs the fabric is known for.",
+                "rules": [("front", [(-0.235, 0.60), (-0.12, 0.645), (-0.095, 0.62), (-0.02, 0.47),
+                                     (0.065, 0.62), (0.12, 0.645), (0.235, 0.60), (0.215, 0.45),
+                                     (0.215, -0.045), (-0.205, -0.045), (-0.205, 0.45)], ANY),
+                          ("front", [(-0.235, 0.60), (-0.12, 0.645), (0.12, 0.645), (0.235, 0.60),
+                                     (0.215, 0.45), (0.215, -0.045), (-0.205, -0.045), (-0.205, 0.45)],
+                           (-0.06, 9.0))],
+            },
+            {
+                "key": "shoes", "label": "Shoes", "color": "#18181a", "back": "#18181a",
+                "info": "Plain black leather shoes, now the usual footwear with Daura Suruwal.",
+                "rules": [("front", box(-1.0, -1.10, 1.0, -0.915), ANY)],
+            },
+            {
+                "key": "suruwal", "label": "Suruwal (Trousers)", "color": "#a79fb2",
+                "back": "flat", "swatch_box": (-0.16, -0.80, -0.06, -0.50), "back_bands": [(-0.915, -0.84)],
+                "side_normal": -0.2,
+                "info": "Trousers worn with the daura, traditionally loose at the top and narrowing towards the "
+                        "ankle. Here they are cut straight, with a band of the Dhaka pattern at each cuff.",
+                "rules": [("front", box(-1.0, -0.915, 1.0, -0.335), ANY)],
+            },
+            {
+                "key": "daura", "label": "Daura (Shirt)", "color": "#a79fb2", "default": True,
+                "back": "flat", "swatch_box": (-0.12, -0.30, 0.12, -0.10), "back_bands": [(-0.345, -0.25)],
+                "side_normal": -0.2,
+                "info": "A knee-length shirt with a crossed front that closes with ties at the side. It is worn "
+                        "over the suruwal and under the waistcoat.",
+            },
+        ],
+    },
 }

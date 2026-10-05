@@ -8,7 +8,11 @@ For every figure in figures_spec.py this:
   3. scales the figure to its real height and stands it on the ground
   4. splits it into one object per part, named after the part key
   5. exports assets/models/<figure>.glb
+
+Figures with a "texture" entry in the spec are painted from a reference photo instead of
+flat colours; run 05_prepare_texture.py for them first.
 """
+import json
 import os
 import sys
 from collections import Counter, deque
@@ -23,9 +27,11 @@ from figures_spec import FIGURES  # noqa: E402
 PIPELINE = os.path.dirname(HERE)
 RAW = os.path.join(PIPELINE, "raw_meshes")
 OUT = os.path.join(os.path.dirname(PIPELINE), "assets", "models")
+TEXTURE = os.path.join(PIPELINE, "input_images", "texture")
 
 SMOOTH_PASSES = 4
 MIN_ISLAND_FACES = 120
+BACK_NORMAL = 0.25  # faces turned this far away from the front count as "back" (Blender: front is -y)
 
 
 def inside(poly, u, v):
@@ -55,6 +61,39 @@ def srgb_to_linear(hex_color):
         return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
     h = hex_color.lstrip("#")
     return tuple(channel(int(h[i:i + 2], 16)) for i in (0, 2, 4)) + (1.0,)
+
+
+def assign_photo_uvs(bm, labels, parts, name):
+    """Look every corner of every face up in the photo atlas.
+
+    The photo is projected straight onto the mesh from the front. Faces turned away from the
+    front would only get a smeared copy of the front, so those use a flat colour swatch from
+    the bottom of the atlas, except where the part asks for the photo anyway (back_bands).
+    """
+    info = json.load(open(os.path.join(TEXTURE, f"{name}_uv.json")))
+    uv = bm.loops.layers.uv.new("UVMap")
+    bm.normal_update()
+    for face, label in zip(bm.faces, labels):
+        part = parts[label]
+        swatch = info["swatches"].get(part["key"])
+        centre = face.calc_center_median()
+        use_swatch = False
+        if swatch is not None and face.normal.y > part.get("side_normal", BACK_NORMAL):
+            use_swatch = not any(lo <= centre.z <= hi for lo, hi in part.get("back_bands", ()))
+        # on the back, some places would show the wrong bit of the front photo; look elsewhere instead
+        dx = dz = 0.0
+        if face.normal.y > BACK_NORMAL:
+            for (x0, z0, x1, z1), shift_x, shift_z in part.get("back_remap", ()):
+                if x0 <= centre.x <= x1 and z0 <= centre.z <= z1:
+                    dx, dz = shift_x, shift_z
+                    break
+        for loop in face.loops:
+            if use_swatch:
+                loop[uv].uv = swatch
+            else:
+                co = loop.vert.co
+                loop[uv].uv = ((info["su"] * (co.x + dx) + info["tu"]) / info["photo"],
+                               1 - (-info["sz"] * (co.z + dz) + info["tz"]) / info["atlas_height"])
 
 
 def build(name):
@@ -109,6 +148,12 @@ def build(name):
             for i in island:
                 labels[i] = target
 
+    textured = bool(spec.get("texture"))
+    if textured:
+        assign_photo_uvs(bm, labels, parts, name)
+        atlas = bpy.data.images.load(os.path.join(TEXTURE, f"{name}_atlas.png"))
+        atlas.colorspace_settings.name = "sRGB"
+
     # real-world size, feet on the ground, centred
     zs = [v.co.z for v in bm.verts]
     xs = [v.co.x for v in bm.verts]
@@ -124,6 +169,11 @@ def build(name):
         mat.use_nodes = True
         bsdf = mat.node_tree.nodes["Principled BSDF"]
         bsdf.inputs["Base Color"].default_value = srgb_to_linear(part["color"])
+        if textured:
+            tex = mat.node_tree.nodes.new("ShaderNodeTexImage")
+            tex.image = atlas
+            tex.interpolation = "Linear"
+            mat.node_tree.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
         bsdf.inputs["Roughness"].default_value = 0.8
         bsdf.inputs["Metallic"].default_value = 0.0
         mat.diffuse_color = srgb_to_linear(part["color"])
