@@ -7,7 +7,7 @@ figure assets.
 
 ## Features
 
-- Gallery of four Nepali figures.
+- Gallery of three Nepali figures.
 - All text in English and Nepali, with a button to switch language.
 - Interactive 3D rotation, zoom, and pan.
 - Tap or click individual model parts to view descriptions.

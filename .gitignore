@@ -7,7 +7,6 @@ __pycache__/
 asset_pipeline/.venv/
 asset_pipeline/models/
 asset_pipeline/Hunyuan3D-2/
-asset_pipeline/Hunyuan3D-2.1/
 asset_pipeline/renders/
 
 # Local editor settings
