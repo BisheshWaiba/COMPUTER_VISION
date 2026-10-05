@@ -3,12 +3,13 @@
 ## 1. Overview
 
 Figures of Nepal is an interactive 3D gallery built with Python. It presents
-four figures as explorable GLB models:
+five figures as explorable GLB models:
 
 1. Prithvi Narayan Shah
 2. Nepali Man in Daura Suruwal
 3. Nepali Woman in Kurtha Suruwal
 4. Nepali Man with Istakot and Dhaka Topi (painted from a photograph)
+5. Nepali Woman in Gunyu Cholo (painted from front and back photographs)
 
 The application is designed for desktop use, but its Kivy layout and touch
 handling also support a phone-shaped interaction model. Each model is divided
@@ -143,8 +144,12 @@ needed when using the checked-in assets.
 3. `scripts/05_prepare_texture.py`
    - Only for figures whose specification has a `texture` entry.
    - Cuts the person out of the reference photo and lines the photo up with the raw mesh.
-   - Builds `input_images/texture/<figure>_atlas.png` (the photo plus flat colour swatches
-     for the parts of the model the photo cannot see) and `<figure>_uv.json`.
+   - Makes the picture used for the back and sides: a separate back-view photo if the
+     spec names one under `back_photo` (mirrored, lined up with the mesh, and with any
+     `ignore` boxes left out), otherwise a copy of the front photo. Front-only details
+     (hands, buttons, a V-neck) are covered up as listed under `clean_back`.
+   - Builds `input_images/texture/<figure>_atlas.png` (the photo, the cleaned copy and a
+     few flat colour swatches) and `<figure>_uv.json`.
    - Run it after step 2 and before step 4 below.
 
 4. `scripts/03_split_parts.py`
@@ -154,9 +159,10 @@ needed when using the checked-in assets.
    - Smooths boundaries and removes small disconnected islands.
    - Scales and grounds the figure.
    - Exports one named mesh object per part to `assets/models/`.
-   - For textured figures, projects the photo onto the mesh from the front and gives the
-     back a flat colour, as set by each part's `back`, `swatch_box`, `back_bands`,
-     `back_remap` and `side_normal` entries in `figures_spec.py`.
+   - For textured figures, projects the photo onto front faces, the cleaned copy onto
+     back faces, and a strip of each part's own fabric onto side faces, as set by each
+     part's `back`, `side`, `side_bands`, `side_from`, `shift`, `swatch_box` and
+     `back_remap` entries in `figures_spec.py`.
 
 5. `scripts/04_verify_and_write_content.py`
    - Verifies that expected part names exist in each GLB.

@@ -2,7 +2,7 @@
 
 The models were generated from the pictures below with Hunyuan3D-2
 (shape model only) and then split into named parts in Blender.
-The fourth figure is also painted from its reference photograph.
+The fourth and fifth figures are also painted from their reference photographs.
 
 ## Source pictures (Wikimedia Commons)
 
@@ -12,6 +12,7 @@ The fourth figure is also painted from its reference photograph.
 | Nepali man | [Dhakatopinepalidress.jpg](https://commons.wikimedia.org/wiki/File:Dhakatopinepalidress.jpg) | Ak479726 | CC BY-SA 4.0 |
 | Nepali woman | [Girl in salwar kameez.jpg](https://commons.wikimedia.org/wiki/File:Girl_in_salwar_kameez.jpg) | Samantha McNamara | CC BY 2.0 |
 | Nepali man with Istakot and Dhaka Topi | Reference photograph supplied by the project owner, who has confirmed they hold the rights to use it | n/a | n/a |
+| Nepali woman in Gunyu Cholo | Front and back reference photographs supplied by the project owner | n/a | n/a |
 
 The CC BY-SA pictures require attribution and that derived works are shared
 under the same licence.

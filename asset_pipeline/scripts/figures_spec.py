@@ -232,40 +232,69 @@ FIGURES = {
     },
 
     # Painted from a reference photograph instead of flat colours: see 05_prepare_texture.py.
-    # Per part, "back" says how to colour faces the photo cannot see (the back of the figure):
-    #   "project"  reuse the photo, "#rrggbb" a fixed colour, "flat" the typical colour of
-    #   "swatch_box" (x0, z0, x1, z1, in raw-mesh coordinates). "back_bands" lists height
-    #   ranges (z0, z1) where the photo is reused anyway, for trim that runs round the garment.
+    #
+    # The photo only shows the front, so 05 also makes a cleaned copy of it for the back and
+    # sides ("clean_back"): things that should not show there are covered, either by copying
+    # another patch of the photo over them or by filling them with a fabric colour.
+    # Boxes are (x0, z0, x1, z1) in raw-mesh coordinates.
+    #
+    # Per part:
+    #   "back"        what back-facing faces show: "project" the cleaned photo, "front" the
+    #                 original photo, "#rrggbb" a fixed colour, or "flat" the typical colour of
+    #                 "swatch_box"
+    #   "side"        (column, spread[, lift]): side-facing faces show a vertical strip of the
+    #                 photo centred on x = +/-column and widened by `spread` per unit of depth,
+    #                 so the fabric continues round the side instead of smearing; `lift` reads
+    #                 the strip that much higher up
+    #   "side_bands"  [(z0, z1, strip)]: a different strip for side faces between those heights
+    #   "side_from"   "front": take the side strip from the front photo even though the back
+    #                 of the part uses the cleaned / back photo. "side": "flat" uses the swatch;
+    #                 "side": "front" carries the front photo round onto the sides (best for
+    #                 faces, where a strip would cut across the cheeks).
+    #   "back_remap"  [(box, dx, dz)]: back faces inside box look dx, dz away in the photo
+    #   "shift"       (dx, dz): the whole part is this far away in the photo from where it is
+    #                 on the mesh (the mesh and the photo never line up exactly everywhere)
     "nepali_man_v2": {
         "title": "Nepali Man with Istakot and Dhaka Topi",
         "description": "A man in Daura Suruwal, wearing a patterned Istakot (waistcoat) and a Dhaka Topi.",
         "raw_mesh": "nepali_man_v2.glb",
         "height_m": 1.72,
-        "texture": {"photo": "man_vest.jpg"},
+        "texture": {
+            "photo": "man_vest.jpg",
+            "clean_back": {
+                # applied in order: first hide the buttons, then cover the V-neck with pattern
+                "copy": [((-0.04, -0.05, 0.035, 0.46), 0.075, 0.0),
+                         ((-0.12, 0.44, 0.12, 0.66), 0.08, -0.20)],
+                # paint the hands out with shirt fabric
+                "fill": [((-0.345, -0.27, -0.175, -0.08), (-0.12, -0.30, 0.12, -0.10)),
+                         ((0.165, -0.27, 0.335, -0.08), (-0.12, -0.30, 0.12, -0.10))],
+            },
+        },
         "parts": [
             {
-                "key": "dhaka_topi", "label": "Dhaka Topi", "color": "#b5455a", "back": "project",
-                "back_remap": [((-1.0, 0.70, 1.0, 1.2), 0.0, 0.05)],
+                "key": "dhaka_topi", "label": "Dhaka Topi", "color": "#b5455a",
+                "back": "project", "side": (0.0, 0.6, 0.03), "back_remap": [((-1.0, 0.70, 1.0, 1.2), 0.0, 0.05)],
                 "info": "A cap cut from Dhaka, a hand-woven patterned cloth. It is taller at the front than "
                         "at the back and is a symbol of Nepali identity.",
                 "rules": [("front", box(-0.25, 0.835, 0.25, 1.10), ANY)],
             },
             {
-                "key": "hands", "color": "#b98a68", "back": "project",
-                "rules": [("front", box(-0.32, -0.24, -0.19, -0.07), (-0.16, 0.04)),
-                          ("front", box(0.17, -0.24, 0.29, -0.07), (-0.16, 0.04))],
+                "key": "hands", "color": "#b98a68", "back": "front", "side": (0.245, 0.5), "shift": (0.0, 0.04),
+                "rules": [("front", box(-0.32, -0.215, -0.20, -0.07), (-0.14, 0.02)),
+                          ("front", box(0.18, -0.215, 0.29, -0.07), (-0.14, 0.02))],
             },
             {
-                "key": "neck", "color": "#b98a68", "back": "#b78864",
+                "key": "neck", "color": "#b98a68", "side": "front",
+                "back": "flat", "swatch_box": (0.03, 0.74, 0.07, 0.78),
                 "rules": [("front", box(-0.17, 0.645, 0.15, 0.74), ANY)],
             },
             {
-                "key": "head", "color": "#b98a68", "back": "#241c1a",
+                "key": "head", "color": "#b98a68", "back": "#241c1a", "side": "front",
                 "rules": [("front", box(-0.17, 0.74, 0.15, 0.835), ANY)],
             },
             {
-                "key": "istakot", "label": "Istakot (Waistcoat)", "color": "#a02b3a", "back": "project",
-                "back_remap": [((-0.12, 0.44, 0.12, 0.66), 0.105, -0.20)],
+                "key": "istakot", "label": "Istakot (Waistcoat)", "color": "#a02b3a",
+                "back": "project", "side": (0.11, 0.5),
                 "info": "A sleeveless waistcoat worn over the daura. This one is cut from patterned Dhaka-style "
                         "cloth, with the diamond motifs the fabric is known for.",
                 "rules": [("front", [(-0.235, 0.60), (-0.12, 0.645), (-0.095, 0.62), (-0.02, 0.47),
@@ -276,24 +305,109 @@ FIGURES = {
                            (-0.06, 9.0))],
             },
             {
-                "key": "shoes", "label": "Shoes", "color": "#18181a", "back": "#18181a",
+                "key": "shoes", "label": "Shoes", "color": "#18181a", "back": "project", "side": (0.14, 0.3),
                 "info": "Plain black leather shoes, now the usual footwear with Daura Suruwal.",
                 "rules": [("front", box(-1.0, -1.10, 1.0, -0.915), ANY)],
             },
             {
                 "key": "suruwal", "label": "Suruwal (Trousers)", "color": "#a79fb2",
-                "back": "flat", "swatch_box": (-0.16, -0.80, -0.06, -0.50), "back_bands": [(-0.915, -0.84)],
-                "side_normal": -0.2,
+                "back": "project", "side": (0.115, 0.5),
                 "info": "Trousers worn with the daura, traditionally loose at the top and narrowing towards the "
                         "ankle. Here they are cut straight, with a band of the Dhaka pattern at each cuff.",
                 "rules": [("front", box(-1.0, -0.915, 1.0, -0.335), ANY)],
             },
             {
                 "key": "daura", "label": "Daura (Shirt)", "color": "#a79fb2", "default": True,
-                "back": "flat", "swatch_box": (-0.12, -0.30, 0.12, -0.10), "back_bands": [(-0.345, -0.25)],
-                "side_normal": -0.2,
+                "back": "project", "side": (0.27, 0.35), "side_bands": [(-1.0, -0.07, (0.17, 0.3))],
                 "info": "A knee-length shirt with a crossed front that closes with ties at the side. It is worn "
                         "over the suruwal and under the waistcoat.",
+            },
+        ],
+    },
+    # Shape from the front (namaste) photo; the back is painted from a second photo taken
+    # from behind. In that back photo the arms hang down, which the model's arms do not, so
+    # they are left out ("ignore", as fractions of the back photo) and the arms are skin
+    # colour wherever the front photo cannot see them.
+    "nepali_woman_v2": {
+        "title": "Nepali Woman in Gunyu Cholo",
+        "description": "A woman in Gunyu Cholo with a Patuka, Pote and gold jewellery, greeting with a namaste.",
+        "raw_mesh": "nepali_woman_v2.glb",
+        "height_m": 1.58,
+        "texture": {
+            "photo": "woman_namaste_front.png",
+            "back_photo": {
+                "photo": "woman_namaste_back.png",
+                "ignore": [(0.07, 0.335, 0.215, 0.56), (0.625, 0.335, 0.77, 0.63)],
+            },
+        },
+        "parts": [
+            {
+                "key": "shirbandi", "label": "Shirbandi (Head Ornament)", "color": "#d4a437",
+                "back": "project", "side": "front",
+                "info": "A gold ornament worn across the forehead and along the parting of the hair, "
+                        "usually on festive occasions.",
+                "rules": [("front", box(-0.20, 0.855, 0.20, 0.91), ANY),
+                          ("front", box(-0.03, 0.91, 0.03, 1.02), FRONT)],
+            },
+            {
+                "key": "head", "color": "#8a5a3c", "back": "project", "side": "front",
+                "rules": [("side", [(-0.30, 0.70), (-0.10, 0.70), (0.0, 0.735), (0.14, 0.79),
+                                    (0.30, 0.79), (0.30, 1.10), (-0.30, 1.10)], ANY)],
+            },
+            {
+                "key": "kantha", "label": "Kantha (Gold Necklace)", "color": "#c9972c",
+                "back": "project", "side": (0.12, 0.15), "side_from": "front",
+                "info": "A heavy necklace of gold beads worn close around the neck. Longer strands of beads "
+                        "hang below it on the chest.",
+                "rules": [("side", [(-0.14, 0.60), (-0.04, 0.595), (0.15, 0.68), (0.15, 0.79), (0.0, 0.735),
+                                    (-0.10, 0.70), (-0.14, 0.70)], (-0.165, 0.155))],
+            },
+            {
+                "key": "chura", "label": "Chura (Bangles)", "color": "#c8452c", "back": "front", "side": (0.10, 0.2),
+                "info": "Stacks of bangles worn on both wrists, here in red and gold.",
+                "rules": [("front", box(-0.15, 0.355, -0.065, 0.475), (-9.0, -0.08)),
+                          ("front", box(0.055, 0.355, 0.125, 0.475), (-9.0, -0.08))],
+            },
+            {
+                "key": "arms", "color": "#8a5a3c", "back": "flat", "side": "flat",
+                "swatch_box": (-0.30, 0.36, -0.20, 0.42),
+                "rules": [("front", box(-0.065, 0.43, 0.06, 0.645), (-9.0, -0.14)),
+                          ("front", box(-0.25, 0.31, -0.065, 0.47), (-9.0, -0.08)),
+                          ("front", box(0.06, 0.31, 0.25, 0.47), (-9.0, -0.08)),
+                          ("front", box(-0.42, 0.29, -0.25, 0.485), ANY),
+                          ("front", box(0.25, 0.29, 0.42, 0.485), ANY)],
+            },
+            {
+                "key": "pote", "label": "Pote (Bead Strands)", "color": "#2f6b3a", "back": "project", "side": (0.2, 0.2),
+                "info": "Many strands of small glass beads, here in green, worn like a sash from one shoulder to "
+                        "the opposite hip. Pote is traditionally a sign of a married woman.",
+                "rules": [("front", [(-0.215, 0.62), (-0.125, 0.62), (-0.09, 0.47), (-0.18, 0.47)], FRONT),
+                          ("front", [(-0.16, 0.385), (-0.10, 0.385), (0.285, 0.03), (0.285, -0.055),
+                                     (0.22, -0.055), (-0.16, 0.30)], FRONT),
+                          ("front", [(-0.262, 0.606), (-0.19, 0.658), (0.306, -0.004), (0.234, -0.056)], BACK)],
+            },
+            {
+                "key": "feet", "color": "#8a5a3c", "back": "project", "side": (0.085, 0.3),
+                "rules": [("front", box(-1.0, -1.10, 1.0, -0.875), ANY)],
+            },
+            {
+                "key": "patuka", "label": "Patuka (Waistband)", "color": "#f0c93a",
+                "back": "project", "side": (0.17, 0.3),
+                "info": "A long cloth wound several times around the waist. It holds the skirt in place and "
+                        "supports the back during work.",
+                "rules": [("front", box(-1.0, 0.13, 1.0, 0.32), ANY)],
+            },
+            {
+                "key": "cholo", "label": "Cholo (Blouse)", "color": "#8e1420", "back": "project",
+                "side": (0.28, 0.2), "side_bands": [(-1.0, 0.46, (0.17, 0.25))],
+                "info": "A fitted blouse, here in red velvet with gold trim on the short sleeves.",
+                "rules": [("front", box(-1.0, 0.32, 1.0, 0.72), ANY)],
+            },
+            {
+                "key": "gunyu", "label": "Gunyu (Wrap Skirt)", "color": "#c8321e", "default": True,
+                "back": "project", "side": (0.15, 0.4),
+                "info": "A length of printed cotton wrapped around the lower body and tucked in at the waist. "
+                        "Bright floral prints like this one are typical.",
             },
         ],
     },

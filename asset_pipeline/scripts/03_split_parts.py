@@ -31,7 +31,8 @@ TEXTURE = os.path.join(PIPELINE, "input_images", "texture")
 
 SMOOTH_PASSES = 4
 MIN_ISLAND_FACES = 120
-BACK_NORMAL = 0.25  # faces turned this far away from the front count as "back" (Blender: front is -y)
+SIDE_NORMAL = 0.5   # faces whose normal.y is within +/- this are "side" faces (Blender: front is -y)
+FACING_SMOOTH = 2   # passes that tidy the front / side / back split
 
 
 def inside(poly, u, v):
@@ -63,37 +64,75 @@ def srgb_to_linear(hex_color):
     return tuple(channel(int(h[i:i + 2], 16)) for i in (0, 2, 4)) + (1.0,)
 
 
-def assign_photo_uvs(bm, labels, parts, name):
+def assign_photo_uvs(bm, labels, parts, neighbours, name):
     """Look every corner of every face up in the photo atlas.
 
-    The photo is projected straight onto the mesh from the front. Faces turned away from the
-    front would only get a smeared copy of the front, so those use a flat colour swatch from
-    the bottom of the atlas, except where the part asks for the photo anyway (back_bands).
+    The atlas holds the photo, a cleaned copy of it, and a few flat colour swatches.
+      front faces  get the photo projected straight on
+      back faces   get the cleaned copy projected the same way, or a swatch
+      side faces   are edge-on to the photo, so projecting would smear one column of pixels
+                   along them; they take a vertical strip of the part's own fabric instead
     """
     info = json.load(open(os.path.join(TEXTURE, f"{name}_uv.json")))
+    photo, width, height = info["photo"], info["atlas_width"], info["atlas_height"]
     uv = bm.loops.layers.uv.new("UVMap")
     bm.normal_update()
-    for face, label in zip(bm.faces, labels):
+
+    def lookup(x, z, cleaned):
+        return ((info["su"] * x + info["tu"] + (photo if cleaned else 0)) / width,
+                1 - (-info["sz"] * z + info["tz"]) / height)
+
+    FRONT, SIDE, BACK = 0, 1, 2
+
+    def turned_to(normal):
+        # judged in the horizontal plane only: a face tilted up or down (a bowed head, the top
+        # of a shoulder) still faces front or back, and the photo projects onto it cleanly
+        level = (normal.x ** 2 + normal.y ** 2) ** 0.5
+        if level < 0.3:
+            return FRONT if normal.y <= 0 else BACK
+        across = normal.y / level
+        return FRONT if across < -SIDE_NORMAL else BACK if across > SIDE_NORMAL else SIDE
+
+    facing = [turned_to(f.normal) for f in bm.faces]
+    for _ in range(FACING_SMOOTH):
+        new = facing[:]
+        for i, near in enumerate(neighbours):
+            votes = Counter(facing[j] for j in near)
+            if votes:
+                top, count = votes.most_common(1)[0]
+                if top != facing[i] and count >= 2:
+                    new[i] = top
+        facing = new
+
+    for face, label, turned in zip(bm.faces, labels, facing):
         part = parts[label]
-        swatch = info["swatches"].get(part["key"])
+        cleaned = part.get("back", "project") != "front"
         centre = face.calc_center_median()
-        use_swatch = False
-        if swatch is not None and face.normal.y > part.get("side_normal", BACK_NORMAL):
-            use_swatch = not any(lo <= centre.z <= hi for lo, hi in part.get("back_bands", ()))
-        # on the back, some places would show the wrong bit of the front photo; look elsewhere instead
-        dx = dz = 0.0
-        if face.normal.y > BACK_NORMAL:
-            for (x0, z0, x1, z1), shift_x, shift_z in part.get("back_remap", ()):
-                if x0 <= centre.x <= x1 and z0 <= centre.z <= z1:
-                    dx, dz = shift_x, shift_z
-                    break
-        for loop in face.loops:
-            if use_swatch:
-                loop[uv].uv = swatch
-            else:
-                co = loop.vert.co
-                loop[uv].uv = ((info["su"] * (co.x + dx) + info["tu"]) / info["photo"],
-                               1 - (-info["sz"] * (co.z + dz) + info["tz"]) / info["atlas_height"])
+        corners = [loop.vert.co for loop in face.loops]
+        shift_x, shift_z = part.get("shift", (0.0, 0.0))  # where this part really is in the photo
+        if turned == FRONT or (turned == SIDE and part.get("side") == "front"):
+            uvs = [lookup(co.x + shift_x, co.z + shift_z, False) for co in corners]
+        elif turned == SIDE and part.get("side") == "flat":
+            uvs = [info["swatches"][part["key"]]] * len(corners)
+        elif turned == SIDE and "side" in part:
+            strip = next((band for z0, z1, band in part.get("side_bands", ()) if z0 <= centre.z <= z1),
+                         part["side"])
+            column, spread, lift = (tuple(strip) + (0.0,))[:3]
+            sign = 1 if centre.x >= 0 else -1
+            from_back = cleaned and part.get("side_from") != "front"
+            uvs = [lookup(sign * (column + spread * co.y), co.z + lift + shift_z, from_back) for co in corners]
+        elif turned == BACK and part["key"] in info["swatches"]:
+            uvs = [info["swatches"][part["key"]]] * len(corners)
+        else:
+            dx, dz = shift_x, shift_z
+            if turned == BACK:
+                for (x0, z0, x1, z1), remap_x, remap_z in part.get("back_remap", ()):
+                    if x0 <= centre.x <= x1 and z0 <= centre.z <= z1:
+                        dx, dz = remap_x, remap_z
+                        break
+            uvs = [lookup(co.x + dx, co.z + dz, cleaned) for co in corners]
+        for loop, value in zip(face.loops, uvs):
+            loop[uv].uv = value
 
 
 def build(name):
@@ -150,7 +189,7 @@ def build(name):
 
     textured = bool(spec.get("texture"))
     if textured:
-        assign_photo_uvs(bm, labels, parts, name)
+        assign_photo_uvs(bm, labels, parts, neighbours, name)
         atlas = bpy.data.images.load(os.path.join(TEXTURE, f"{name}_atlas.png"))
         atlas.colorspace_settings.name = "sRGB"
 

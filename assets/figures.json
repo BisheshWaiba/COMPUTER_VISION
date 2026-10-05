@@ -123,6 +123,43 @@
           "info": "A knee-length shirt with a crossed front that closes with ties at the side. It is worn over the suruwal and under the waistcoat."
         }
       }
+    },
+    {
+      "id": "nepali_woman_v2",
+      "title": "Nepali Woman in Gunyu Cholo",
+      "model": "models/nepali_woman_v2.glb",
+      "thumbnail": "thumbnails/nepali_woman_v2.png",
+      "description": "A woman in Gunyu Cholo with a Patuka, Pote and gold jewellery, greeting with a namaste.",
+      "parts": {
+        "shirbandi": {
+          "label": "Shirbandi (Head Ornament)",
+          "info": "A gold ornament worn across the forehead and along the parting of the hair, usually on festive occasions."
+        },
+        "kantha": {
+          "label": "Kantha (Gold Necklace)",
+          "info": "A heavy necklace of gold beads worn close around the neck. Longer strands of beads hang below it on the chest."
+        },
+        "chura": {
+          "label": "Chura (Bangles)",
+          "info": "Stacks of bangles worn on both wrists, here in red and gold."
+        },
+        "pote": {
+          "label": "Pote (Bead Strands)",
+          "info": "Many strands of small glass beads, here in green, worn like a sash from one shoulder to the opposite hip. Pote is traditionally a sign of a married woman."
+        },
+        "patuka": {
+          "label": "Patuka (Waistband)",
+          "info": "A long cloth wound several times around the waist. It holds the skirt in place and supports the back during work."
+        },
+        "cholo": {
+          "label": "Cholo (Blouse)",
+          "info": "A fitted blouse, here in red velvet with gold trim on the short sleeves."
+        },
+        "gunyu": {
+          "label": "Gunyu (Wrap Skirt)",
+          "info": "A length of printed cotton wrapped around the lower body and tucked in at the waist. Bright floral prints like this one are typical."
+        }
+      }
     }
   ]
 }

@@ -18,6 +18,12 @@ FOV_V = 28.0            # vertical field of view, degrees
 FIT_MARGIN = 1.20       # empty space left around the model when zoom is 1
 MAX_RENDER_SIDE = 1280  # longest side of the off-screen buffer, pixels
 HIGHLIGHT = (1.0, 0.72, 0.15)
+
+# (ambient, key, fill) light colours. Flat-coloured models need shading to show their shape.
+# Photo-textured models already carry the light and shadow of the photo, so they get mostly
+# even light; shading them again makes them far too dark.
+LIGHTS_FLAT = ((0.36, 0.36, 0.38), (0.58, 0.57, 0.54), (0.14, 0.15, 0.18))
+LIGHTS_PHOTO = ((0.72, 0.72, 0.72), (0.32, 0.32, 0.31), (0.06, 0.06, 0.07))
 DIM = 0.55
 
 
@@ -101,21 +107,22 @@ class Renderer(threading.Thread):
         self.view = (0.0, 0.0, 1.0, 0.0, 0.0)
 
         ambient = AmbientLight("ambient")
-        ambient.setColor((0.36, 0.36, 0.38, 1))
         self.scene.setLight(self.scene.attachNewNode(ambient))
 
         # lights ride with the camera so the side facing the viewer is always lit
         self.rig = self.scene.attachNewNode("rig")
         key = DirectionalLight("key")
-        key.setColor((0.58, 0.57, 0.54, 1))
         key_np = self.rig.attachNewNode(key)
         key_np.setHpr(-30, -35, 0)
         self.scene.setLight(key_np)
         fill = DirectionalLight("fill")
-        fill.setColor((0.14, 0.15, 0.18, 1))
         fill_np = self.rig.attachNewNode(fill)
         fill_np.setHpr(50, -10, 0)
         self.scene.setLight(fill_np)
+
+        self.lights = (ambient, key, fill)
+        for light, colour in zip(self.lights, LIGHTS_FLAT):
+            light.setColor((*colour, 1))
 
         self.picker_ray = CollisionRay()
         picker = CollisionNode("picker")
@@ -177,7 +184,7 @@ class Renderer(threading.Thread):
         self._apply_view()
 
     def _do_load(self, path, part_keys, on_ready):
-        from panda3d.core import Filename
+        from panda3d.core import Filename, Texture
 
         if self.model is not None:
             self.model.detachNode()
@@ -188,9 +195,24 @@ class Renderer(threading.Thread):
             for material in model.findAllMaterials():
                 r, g, b, a = material.getBaseColor()
                 material.setBaseColor((r ** (1 / 2.2), g ** (1 / 2.2), b ** (1 / 2.2), a))
+            # photo textures: for the same reason, show their colours as stored (an sRGB
+            # texture would be darkened on the way in and never brightened again), and
+            # keep one copy of each picture, not one per part
+            shared = {}
+            for texture in model.findAllTextures():
+                if texture.getFormat() == Texture.F_srgb:
+                    texture.setFormat(Texture.F_rgb)
+                elif texture.getFormat() == Texture.F_srgb_alpha:
+                    texture.setFormat(Texture.F_rgba)
+                first = shared.setdefault(texture.getName(), texture)
+                if first is not texture:
+                    model.replaceTexture(texture, first)
             self.models[path] = model
         self.model = self.models[path]
         self.model_path = path
+        textured = self.model.findAllTextures().getNumTextures() > 0
+        for light, colour in zip(self.lights, LIGHTS_PHOTO if textured else LIGHTS_FLAT):
+            light.setColor((*colour, 1))
         self.model.reparentTo(self.scene)
 
         self.parts = {}
