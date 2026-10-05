@@ -302,6 +302,94 @@ FIGURES = {
             },
         ],
     },
+
+    # The same woman and photos as nepali_woman_v2, but the shape comes from the larger
+    # Hunyuan3D-2.1 model (02b_generate_mesh_v21.py, seed 2024, on the prepared picture
+    # "nepali_woman_v2"). The part outlines are redrawn for this mesh.
+    "nepali_woman_v3": {
+        "title": "Nepali Woman in Gunyu Cholo (new model)",
+        "description": "The same woman in Gunyu Cholo, greeting with a namaste, built with a newer and "
+                       "more detailed shape model.",
+        "raw_mesh": "nepali_woman_v3.glb",
+        "height_m": 1.58,
+        "texture": {
+            "photo": "woman_namaste_front.png",
+            "back_photo": {
+                "photo": "woman_namaste_back.png",
+                "ignore": [(0.07, 0.335, 0.215, 0.56), (0.625, 0.335, 0.77, 0.63)],
+            },
+        },
+        "parts": [
+            {
+                "key": "shirbandi", "label": "Shirbandi (Head Ornament)", "color": "#d4a437",
+                "back": "project", "side": "front",
+                "info": "A gold ornament worn across the forehead and along the parting of the hair, "
+                        "usually on festive occasions.",
+                "rules": [("front", box(-0.20, 0.875, 0.20, 0.935), ANY),
+                          ("front", box(-0.03, 0.935, 0.03, 1.02), FRONT)],
+            },
+            {
+                "key": "chura", "label": "Chura (Bangles)", "color": "#c8452c", "back": "front", "side": (0.07, 0.2),
+                "info": "Stacks of bangles worn on both wrists, here in red and gold.",
+                "rules": [("front", box(-0.115, 0.43, -0.025, 0.53), (-9.0, -0.09)),
+                          ("front", box(0.025, 0.43, 0.115, 0.53), (-9.0, -0.09))],
+            },
+            {
+                "key": "arms", "color": "#8a5a3c", "back": "flat", "side": "flat",
+                "swatch_box": (-0.30, 0.37, -0.20, 0.43),
+                "rules": [("front", box(-0.05, 0.43, 0.05, 0.77), (-9.0, -0.10)),
+                          ("front", box(-0.25, 0.395, -0.115, 0.50), (-9.0, -0.05)),
+                          ("front", box(0.115, 0.395, 0.25, 0.50), (-9.0, -0.05)),
+                          ("front", box(-0.42, 0.33, -0.25, 0.50), ANY),
+                          ("front", box(0.25, 0.33, 0.42, 0.50), ANY)],
+            },
+            {
+                "key": "head", "color": "#8a5a3c", "back": "project", "side": "front",
+                "rules": [("side", [(-0.30, 0.72), (-0.02, 0.72), (0.08, 0.75), (0.24, 0.80),
+                                    (0.30, 0.80), (0.30, 1.10), (-0.30, 1.10)], ANY)],
+            },
+            {
+                "key": "kantha", "label": "Kantha (Gold Necklace)", "color": "#c9972c",
+                "back": "project", "side": (0.12, 0.15), "side_from": "front",
+                "info": "A heavy necklace of gold beads worn close around the neck. Longer strands of beads "
+                        "hang below it on the chest.",
+                "rules": [("side", [(-0.10, 0.61), (0.0, 0.62), (0.22, 0.70), (0.24, 0.80), (0.08, 0.75),
+                                    (-0.02, 0.72), (-0.10, 0.72)], (-0.17, 0.17))],
+            },
+            {
+                "key": "pote", "label": "Pote (Bead Strands)", "color": "#2f6b3a", "back": "project", "side": (0.2, 0.2),
+                "info": "Many strands of small glass beads, here in green, worn like a sash from one shoulder to "
+                        "the opposite hip. Pote is traditionally a sign of a married woman.",
+                "rules": [("front", [(-0.215, 0.62), (-0.125, 0.62), (-0.09, 0.49), (-0.18, 0.49)], FRONT),
+                          ("front", [(-0.12, 0.36), (-0.04, 0.37), (0.24, 0.08), (0.24, -0.02),
+                                     (0.16, -0.02), (-0.12, 0.27)], FRONT),
+                          ("front", [(-0.262, 0.606), (-0.19, 0.658), (0.306, -0.004), (0.234, -0.056)], BACK)],
+            },
+            {
+                "key": "feet", "color": "#8a5a3c", "back": "project", "side": (0.085, 0.3),
+                "rules": [("front", box(-1.0, -1.10, 1.0, -0.885), ANY)],
+            },
+            {
+                "key": "patuka", "label": "Patuka (Waistband)", "color": "#f0c93a",
+                "back": "project", "side": (0.17, 0.3),
+                "info": "A long cloth wound several times around the waist. It holds the skirt in place and "
+                        "supports the back during work.",
+                "rules": [("front", box(-1.0, 0.13, 1.0, 0.33), ANY)],
+            },
+            {
+                "key": "cholo", "label": "Cholo (Blouse)", "color": "#8e1420", "back": "project",
+                "side": (0.28, 0.2), "side_bands": [(-1.0, 0.46, (0.17, 0.25))],
+                "info": "A fitted blouse, here in red velvet with gold trim on the short sleeves.",
+                "rules": [("front", box(-1.0, 0.33, 1.0, 0.72), ANY)],
+            },
+            {
+                "key": "gunyu", "label": "Gunyu (Wrap Skirt)", "color": "#c8321e", "default": True,
+                "back": "project", "side": (0.15, 0.4),
+                "info": "A length of printed cotton wrapped around the lower body and tucked in at the waist. "
+                        "Bright floral prints like this one are typical.",
+            },
+        ],
+    },
 }
 
 
@@ -383,4 +471,11 @@ NEPALI = {
                       "फूलबुट्टे छाप धेरै प्रचलित छन्।"),
         },
     },
+}
+
+# the newer model of the same woman has the same parts, so it shares their text
+NEPALI["nepali_woman_v3"] = {
+    **NEPALI["nepali_woman_v2"],
+    "title": "गुन्यू चोलोमा नेपाली महिला (नयाँ मोडेल)",
+    "description": "गुन्यू चोलोमा नमस्ते गरिरहेकी उही महिला, नयाँ र अझ विस्तृत आकार मोडेलबाट बनाइएको।",
 }
