@@ -10,7 +10,8 @@ For each such figure this
      and scale where the mesh's front outline best covers the person's outline
   3. cleans the photo's edges (no background colour bleeding onto the model), and, if the
      spec has "clean_front", touches up the front photo itself (the same "copy" / "fill"
-     steps as "clean_back", for something in the photo that lands on the wrong part of the mesh)
+     steps as "clean_back", for something in the photo that lands on the wrong part of the mesh),
+     and, if the spec has "grade", brings out a pale photo's colour (vibrance, warmth, contrast)
   4. makes the picture used for the back and sides of the model: a separate back-view
      photo if the spec names one ("back_photo"), otherwise a copy of the front photo;
      either way with the things that should not show there covered up ("clean_back")
@@ -169,6 +170,23 @@ def clean_copy(photo, clean, steps, params):
     return np.clip(result, 0, 255).astype(np.uint8)
 
 
+def grade_photo(rgb, vibrance=1.0, warmth=0.0, contrast=1.0):
+    """Bring out the colour of a pale photo, in the Lab colour space so lightness is kept.
+
+    vibrance  multiplies the colour of muted pixels; strong colours (a marigold garland) are
+              multiplied much less, so they are not blown out
+    warmth    pushes every colour toward yellow (positive) or blue (negative), in Lab units
+    contrast  stretches lightness around the middle grey
+    """
+    lab = cv2.cvtColor(rgb.astype(np.float32) / 255, cv2.COLOR_RGB2LAB)
+    a, b = lab[:, :, 1], lab[:, :, 2]
+    muted = np.clip(1 - np.hypot(a, b) / 60, 0, 1)         # 1 for grey, 0 for vivid
+    boost = 1 + (vibrance - 1) * muted
+    lab[:, :, 1], lab[:, :, 2] = a * boost, b * boost + warmth
+    lab[:, :, 0] = np.clip(50 + (lab[:, :, 0] - 50) * contrast, 0, 100)
+    return np.clip(cv2.cvtColor(lab, cv2.COLOR_LAB2RGB) * 255 + 0.5, 0, 255).astype(np.uint8)
+
+
 def spread_edges(rgb, person):
     """Pixels near or outside the person's edge take the colour of the nearest clean pixel,
     so no background colour bleeds onto the model."""
@@ -222,9 +240,16 @@ def prepare(name):
     photo, clean = spread_edges(rgb, person)
     if "clean_front" in texture:   # touch up the front photo itself (same steps as clean_back)
         photo = clean_copy(photo, clean, texture["clean_front"], params)
+    grading = texture.get("grade")
+    if grading:
+        photo = grade_photo(photo, **grading)
     OUT.mkdir(parents=True, exist_ok=True)
-    behind, behind_clean = back_view(texture, outline, mesh, params, name) if "back_photo" in texture \
-        else (photo, clean)
+    if "back_photo" in texture:
+        behind, behind_clean = back_view(texture, outline, mesh, params, name)
+        if grading:
+            behind = grade_photo(behind, **grading)
+    else:
+        behind, behind_clean = photo, clean
     cleaned = clean_copy(behind, behind_clean, texture.get("clean_back", {}), params)
 
     atlas_width, atlas_height = 2 * PHOTO, PHOTO + SWATCH

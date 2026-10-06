@@ -53,6 +53,8 @@ FIGURES = {
         # "texture" under nepali_man_v2 for what each setting does).
         "texture": {
             "photo": "prepared/prithvi_narayan_shah.png",
+            # the photo is a pale, low-colour bronze: bring out the gold and the teal patina
+            "grade": {"vibrance": 1.9, "warmth": 4.0, "contrast": 1.1},
             # the plume's dark inner side sits behind the cap in the photo but lands on the
             # mesh's bigger cap: paint that corner with the cap's own colour
             "clean_front": {

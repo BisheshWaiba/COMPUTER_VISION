@@ -155,6 +155,8 @@ needed when using the checked-in assets.
      removal runs and `rembg` is not needed for it.
    - If the spec lists `clean_front` steps, touches up the front photo itself (for example,
      paints over a shadow that lands on the wrong part of the mesh).
+   - If the spec has a `grade` entry (`vibrance`, `warmth`, `contrast`), brings out the colour
+     of a pale photo. Vibrance mostly raises muted colours, so vivid ones stay natural.
    - Makes the picture used for the back and sides: a separate back-view photo if the
      spec names one under `back_photo` (mirrored, lined up with the mesh, and with any
      `ignore` boxes left out), otherwise a copy of the front photo. Front-only details
