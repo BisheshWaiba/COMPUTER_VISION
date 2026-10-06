@@ -11,6 +11,7 @@ continuously, so an idle viewer costs nothing.
 import math
 import queue
 import threading
+from collections import namedtuple
 
 from kivy.clock import Clock
 
@@ -18,6 +19,11 @@ FOV_V = 28.0            # vertical field of view, degrees
 FIT_MARGIN = 1.20       # empty space left around the model when zoom is 1
 MAX_RENDER_SIDE = 1280  # longest side of the off-screen buffer, pixels
 HIGHLIGHT = (1.0, 0.72, 0.15)
+POINT_COUNT = 45000     # points scattered over a figure in the point-cloud view
+POINT_SIZE = 0.5        # width of a point as a share of the gap between neighbouring points
+POINT_SELECTED = 1.6    # the same for the selected part, which stands out by being bolder
+# root: the points of the whole figure; parts: part name -> its points; spacing: gap between points
+Cloud = namedtuple("Cloud", "root parts spacing count")
 
 # (ambient, key, fill) light colours. Flat-coloured models need shading to show their shape.
 # Photo-textured models already carry the light and shadow of the photo, so they get mostly
@@ -51,6 +57,13 @@ class Renderer(threading.Thread):
 
     def select(self, key):
         self._commands.put(("select", key))
+
+    def set_points(self, on, on_ready=None):
+        """Show the model as a point cloud (on) or as the solid mesh (off).
+        on_ready(count) runs on the Kivy thread once drawing is set up, with the
+        number of points, or 0 when off. The first time a model is shown as points
+        they are sampled, which takes a moment."""
+        self._commands.put(("points", bool(on), on_ready))
 
     def pick(self, nx, ny, callback):
         """Find the part under a point. nx, ny run from -1 to 1 across the view
@@ -102,6 +115,10 @@ class Renderer(threading.Thread):
         self.model_path = None
         self.parts = {}
         self.named = {}
+        self.selected = None
+        self.points_on = False
+        self.clouds = {}   # model path -> Cloud, sampled the first time it is asked for
+        self.cloud = None  # the Cloud of the model on show, once it has one
         self.center = (0.0, 0.0, 0.0)
         self.extent = (1.0, 1.0)  # half-width, half-height of the model
         self.view = (0.0, 0.0, 1.0, 0.0, 0.0)
@@ -188,6 +205,10 @@ class Renderer(threading.Thread):
 
         if self.model is not None:
             self.model.detachNode()
+        if self.cloud is not None:
+            self.cloud.root.detachNode()
+        self.cloud = None
+        self.points_on = False  # every figure opens as the solid model
         if path not in self.models:
             model = self.base.loader.loadModel(Filename.fromOsSpecific(path))
             # glTF colours are linear; this pipeline lights and shows them as-is, so
@@ -214,6 +235,7 @@ class Renderer(threading.Thread):
         for light, colour in zip(self.lights, LIGHTS_PHOTO if textured else LIGHTS_FLAT):
             light.setColor((*colour, 1))
         self.model.reparentTo(self.scene)
+        self.model.show()  # it may have been hidden while it was shown as points
 
         self.parts = {}
         for key in part_keys:
@@ -277,9 +299,55 @@ class Renderer(threading.Thread):
                            tz + distance * math.sin(pitch_r))
         self.camera.lookAt(tx, ty, tz)
 
+    def _do_points(self, on, callback):
+        self.points_on = on
+        if self.model is not None:
+            if on and self.cloud is None:
+                self.cloud = self.clouds.get(self.model_path) or self._sample_cloud()
+                self._style_cloud()  # a cloud kept from an earlier visit may still look selected
+            if self.cloud is not None:
+                if on:
+                    self.cloud.root.reparentTo(self.scene)
+                else:
+                    self.cloud.root.detachNode()
+            # the hidden mesh still answers taps, so a part can be picked from its points
+            if on:
+                self.model.hide()
+            else:
+                self.model.show()
+        if callback is not None:
+            count = self.cloud.count if on and self.cloud is not None else 0
+            Clock.schedule_once(lambda dt: callback(count), 0)
+
+    def _sample_cloud(self):
+        from app import pointcloud
+
+        cloud = Cloud(*pointcloud.build(self.model, list(self.named.values()), POINT_COUNT))
+        # points carry their own colour: no lights, textures or materials
+        cloud.root.setLightOff(1)
+        cloud.root.setTextureOff(1)
+        cloud.root.setMaterialOff(1)
+        self.clouds[self.model_path] = cloud
+        return cloud
+
+    def _style_cloud(self):
+        """Size and shade the points: all alike, or the selected part bold and the rest dim."""
+        if self.cloud is None:
+            return
+        for name, node in self.cloud.parts.items():
+            chosen = name == self.selected
+            node.setRenderModeThickness(self.cloud.spacing * POINT_SIZE * (POINT_SELECTED if chosen else 1.0))
+            node.setRenderModePerspective(True)  # size in model units: points grow as the camera nears
+            if self.selected is None or chosen:
+                node.clearColorScale()
+            else:
+                node.setColorScale(DIM, DIM, DIM, 1)
+
     def _do_select(self, key):
         from panda3d.core import Material
 
+        self.selected = key if key in self.parts else None
+        self._style_cloud()
         for name, node in self.named.items():
             holder = self.parts.get(name, node)
             holder.clearMaterial()

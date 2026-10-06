@@ -94,6 +94,7 @@ class ViewerScreen(Screen):
         self.title = self.figure.title[lang]
         for chip in self.ids.chips.children:
             chip.text = self.figure.parts[chip.key].label[lang]
+        self.ids.view.refresh_text()
         self._set_selected(self.selected)
 
     def _chip_pressed(self, chip):

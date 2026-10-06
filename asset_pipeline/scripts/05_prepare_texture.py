@@ -48,6 +48,7 @@ EDGE_ERODE = 3    # pixels trimmed off the person's outline before colours are r
 FEATHER = 4       # softness, in pixels, of the edges of cleaned-up patches
 RASTER = 1024     # resolution of the mesh outline used for the search
 HALF = 1.1        # the outline covers x and z from -HALF to +HALF
+SEGMENTER = "birefnet-general"   # rembg model that cuts the person out of a photo with a background
 
 
 def cut_out(photo_name, ignore=()):
@@ -77,7 +78,7 @@ def cut_out(photo_name, ignore=()):
         alpha = np.array(mask) > 127
     else:
         from rembg import new_session, remove  # only needed for photos with a background
-        alpha = np.array(remove(canvas, session=new_session("birefnet-general")))[:, :, 3] > 127
+        alpha = np.array(remove(canvas, session=new_session(SEGMENTER)))[:, :, 3] > 127
     for x0, y0, x1, y1 in ignore:
         alpha[top + round(y0 * img.height):top + round(y1 * img.height),
               left + round(x0 * img.width):left + round(x1 * img.width)] = False

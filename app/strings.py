@@ -25,6 +25,8 @@ STRINGS = {
         "parts_count": "{} parts to explore",
         "loading": "Loading…",
         "hint": "Drag to rotate  ·  Pinch to zoom  ·  Tap a part",
+        "points": "Point cloud",
+        "points_count": "{} points",
     },
     "ne": {
         "language_name": "नेपाली",
@@ -33,6 +35,8 @@ STRINGS = {
         "parts_count": "हेर्नका लागि {} वटा भाग",
         "loading": "लोड हुँदैछ…",
         "hint": "घुमाउन तान्नुहोस्,  जुम गर्न चिम्ट्नुहोस्,  भागमा थिच्नुहोस्",
+        "points": "बिन्दु बादल",
+        "points_count": "{} वटा बिन्दु",
     },
 }
 

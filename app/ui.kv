@@ -162,6 +162,17 @@
             radius: [self.height / 2]
 
 
+<ModeButton@Chip>:
+    size_hint_y: None
+    height: dp(34)
+    canvas.before:
+        Color:
+            rgba: LINE
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, self.height / 2
+            width: 1
+
+
 <InfoCard>:
     orientation: "vertical"
     size_hint: None, None
@@ -274,6 +285,25 @@
                 color: MUTED
                 font_size: "12sp"
                 opacity: 1 if view.has_frame and not card.shown else 0
+            ModeButton:
+                id: points_button
+                text: app.strings["points"]
+                selected: view.points
+                opacity: 1 if view.has_frame else 0
+                disabled: not view.has_frame
+                x: self.parent.right - self.width - dp(12)
+                y: self.parent.top - self.height - dp(36)
+                on_release: view.toggle_points()
+            Label:
+                text: view.point_text
+                font_name: app.font
+                font_script_name: app.script
+                size_hint: None, None
+                size: self.texture_size
+                x: points_button.right - self.width - dp(6)
+                y: points_button.y - self.height - dp(3)
+                color: MUTED
+                font_size: "12sp"
             InfoCard:
                 id: card
                 on_close: root.select("")

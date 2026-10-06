@@ -5,8 +5,10 @@ from kivy.clock import Clock
 from kivy.graphics import Color, Rectangle
 from kivy.graphics.texture import Texture
 from kivy.metrics import dp
-from kivy.properties import BooleanProperty
+from kivy.properties import BooleanProperty, StringProperty
 from kivy.uix.widget import Widget
+
+from app.strings import number
 
 START_VIEW = dict(yaw=-18.0, pitch=6.0, zoom=1.0, pan_x=0.0, pan_z=0.0)
 ZOOM_RANGE = (0.22, 1.5)
@@ -21,6 +23,8 @@ def clamp(value, low, high):
 
 class Model3DView(Widget):
     has_frame = BooleanProperty(False)
+    points = BooleanProperty(False)   # showing the point cloud instead of the solid model
+    point_text = StringProperty("")   # how many points there are, while the cloud is on show
 
     __events__ = ("on_pick",)
 
@@ -39,6 +43,7 @@ class Model3DView(Widget):
         self._poll = None
         self._focus = {}
         self._glide = None
+        self._point_count = 0
 
     @property
     def renderer(self):
@@ -52,6 +57,9 @@ class Model3DView(Widget):
     def show_model(self, path, part_keys):
         self.model_path = path
         self.has_frame = False
+        self.points = False  # the renderer opens every model solid, too
+        self._point_count = 0
+        self.refresh_text()
         self._view = dict(START_VIEW)
         self._focus = {}
         self._cancel_glide()
@@ -82,6 +90,27 @@ class Model3DView(Widget):
     def _got_focus(self, path, focus):
         if path == self.model_path:
             self._focus = focus
+
+    def toggle_points(self):
+        """Switch between the solid model and its point cloud."""
+        self.points = not self.points
+        self._point_count = 0
+        self.refresh_text()
+        path = self.model_path
+        self.renderer.set_points(self.points, lambda count, p=path: self._got_points(p, count))
+
+    def _got_points(self, path, count):
+        if path == self.model_path:
+            self._point_count = count
+            self.refresh_text()
+
+    def refresh_text(self):
+        """Write the point count in the language on screen."""
+        if self.points and self._point_count:
+            app = App.get_running_app()
+            self.point_text = app.strings["points_count"].format(number(f"{self._point_count:,}", app.lang))
+        else:
+            self.point_text = ""
 
     def _glide_to(self, target, duration=0.35):
         self._cancel_glide()

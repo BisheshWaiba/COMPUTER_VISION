@@ -1,0 +1,86 @@
+[
+  {
+    "figure": "prithvi_narayan_shah",
+    "points": 30514,
+    "height_m": 2.05,
+    "compared_pixels": 117494,
+    "mesh_relief_std_cm": 7.33,
+    "relief_correlation": 0.701,
+    "relief_ratio": 0.776,
+    "depth_error_cm": {
+      "median_abs": 2.27,
+      "rms": 4.97,
+      "flat_plane_rms": 6.93,
+      "share_explained": 0.484,
+      "within_1cm": 0.221,
+      "within_2cm": 0.447,
+      "within_5cm": 0.819
+    },
+    "cloud_to_mesh_cm": {
+      "mean": 2.04,
+      "p95": 7.01
+    },
+    "fit": {
+      "scale": 0.1828,
+      "offset": -0.3921,
+      "tilt_x": 0.1219,
+      "tilt_y": 0.1406
+    }
+  },
+  {
+    "figure": "nepali_man_v2",
+    "points": 40282,
+    "height_m": 1.72,
+    "compared_pixels": 161310,
+    "mesh_relief_std_cm": 5.81,
+    "relief_correlation": 0.829,
+    "relief_ratio": 1.036,
+    "depth_error_cm": {
+      "median_abs": 1.16,
+      "rms": 3.23,
+      "flat_plane_rms": 5.13,
+      "share_explained": 0.603,
+      "within_1cm": 0.454,
+      "within_2cm": 0.671,
+      "within_5cm": 0.907
+    },
+    "cloud_to_mesh_cm": {
+      "mean": 1.48,
+      "p95": 4.29
+    },
+    "fit": {
+      "scale": 0.2732,
+      "offset": -0.834,
+      "tilt_x": 0.0219,
+      "tilt_y": 0.1217
+    }
+  },
+  {
+    "figure": "nepali_woman_v2",
+    "points": 45733,
+    "height_m": 1.58,
+    "compared_pixels": 183442,
+    "mesh_relief_std_cm": 4.76,
+    "relief_correlation": 0.611,
+    "relief_ratio": 0.699,
+    "depth_error_cm": {
+      "median_abs": 2.11,
+      "rms": 3.65,
+      "flat_plane_rms": 4.57,
+      "share_explained": 0.364,
+      "within_1cm": 0.25,
+      "within_2cm": 0.477,
+      "within_5cm": 0.839
+    },
+    "cloud_to_mesh_cm": {
+      "mean": 1.62,
+      "p95": 3.99
+    },
+    "fit": {
+      "scale": 0.1332,
+      "offset": -0.2367,
+      "tilt_x": 0.0213,
+      "tilt_y": 0.0892
+    }
+  }
+]

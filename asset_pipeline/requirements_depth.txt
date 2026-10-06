@@ -1,0 +1,12 @@
+# Packages for scripts/06_depth_pointcloud.py. They also cover 05_prepare_texture.py.
+# rembg cuts the person out of a photo that has a background (the man and the woman).
+# Tested with Python 3.12.
+numpy
+scipy
+opencv-python-headless
+trimesh
+pillow
+open3d
+torch
+transformers
+rembg[cpu]

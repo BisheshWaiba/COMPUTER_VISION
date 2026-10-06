@@ -12,6 +12,8 @@ figure assets.
 - Interactive 3D rotation, zoom, and pan.
 - Tap or click individual model parts to view descriptions.
 - Part-selection chips that focus the camera on the selected part.
+- A **Point cloud** button that shows any figure as 45,000 coloured points
+  instead of a solid mesh. Parts can still be tapped and selected.
 - Bundled models, thumbnails, and figure metadata under `assets/`.
 
 ## Requirements
@@ -53,7 +55,8 @@ python -m pip install -r requirements.txt
 
 When the application opens, choose a figure from the gallery. Drag to rotate,
 use the mouse wheel or a pinch gesture to zoom, right-drag to pan, and click a
-model part to display its information.
+model part to display its information. The **Point cloud** button at the top
+right of the viewer switches between the solid model and its point cloud.
 
 ## Run from a new virtual environment
 
@@ -75,6 +78,7 @@ COMPUTER_VISION/
 ├── main.py                  Application entry point
 ├── app/
 │   ├── content.py           Loads assets/figures.json
+│   ├── pointcloud.py        Samples a model's surface into coloured points
 │   ├── renderer.py          Panda3D off-screen renderer
 │   ├── screens.py           Gallery and viewer screens
 │   ├── ui.kv               Kivy layout and styling

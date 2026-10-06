@@ -82,6 +82,36 @@ commands:
 - Mouse wheel or pinch: zoom.
 - Double-click: reset the view.
 - Short left click: pick a model part.
+- **Point cloud** button (top right of the view): switch between the solid model
+  and its point cloud.
+
+### 3.4 Point-cloud view
+
+A point cloud is a set of 3D points, each with a position and a colour, and no
+triangles. It is what a 3D scanner or a photogrammetry run produces before a mesh
+is built from it. The figures here are meshes, so `app/pointcloud.py` goes the other
+way and scatters points over their surface:
+
+1. For every named part it reads the triangles from the GLB, in model space.
+2. It picks 45,000 points over the whole figure, spread by area, so a large triangle
+   gets more points than a small one and the density is even. A fixed random seed
+   makes every run draw the same cloud.
+3. Each point takes its colour from the photo texture at the point's UV position
+   (or from the material colour, for a model without a texture).
+4. Each part's points become one `GeomPoints` node, so a part can still be dimmed or
+   emphasised by name.
+
+`app/renderer.py` does the sampling the first time a model is switched to points
+(about a second), keeps the result for that model, and then only swaps what is
+shown. In point mode the solid mesh is hidden, not removed, so tapping still finds
+the part under the pointer. The selected part's points are drawn larger and the
+others dimmed, as the mesh is. Points are sized in model units, not pixels, so they
+grow when the camera moves closer and the gaps between them show.
+
+The two numbers to tune are `POINT_COUNT` (more points look denser but take longer
+to sample) and `POINT_SIZE` (the point width as a share of the gap between
+neighbouring points; at 1 or above the points merge into a solid surface) at the
+top of `app/renderer.py`. No extra package is needed.
 
 ## 4. Asset and metadata format
 
@@ -183,6 +213,29 @@ needed when using the checked-in assets.
    - Creates thumbnails from rendered previews.
    - Writes `assets/figures.json`.
 
+6. `scripts/06_depth_pointcloud.py` (optional check, not needed to build a model)
+   - Runs after steps 2 and 3 above (it needs the raw mesh and the `<figure>_uv.json`
+     that says how the photo lines up with it).
+   - Estimates depth from each reference photo with Depth Anything V2 (Small),
+     which gives how near each pixel is, but only relative to the other pixels.
+   - Casts a ray through each pixel of the person into the raw mesh, fits the scale,
+     offset and tilt that turn the photo's relative depth into the mesh's depth, and
+     back-projects the photo into a coloured point cloud in metres. The tilt is a small
+     turn of the photo's camera: a photo taken from below makes the feet look nearer
+     than the head, which the mesh does not do.
+   - Writes `pointclouds/<figure>_depth.ply` (open in MeshLab or CloudCompare),
+     `pointclouds/<figure>_report.png` (photo, photo depth, mesh depth, where they
+     differ, a side view, and the cloud seen from 35 degrees) and `pointclouds/metrics.json`.
+   - The cloud shows the front only, since a photo cannot see the back. Because the
+     scale, offset and tilt are taken from the mesh, it checks the shape of the mesh's
+     front against an independent estimate; it does not show that the mesh has the right
+     overall depth or leans the right way, and both start from the same photo.
+   - Packages are listed in `requirements_depth.txt`. The first run downloads the depth
+     model (about 100 MB) from Hugging Face, and, for the man and the woman, the
+     segmentation model `isnet-general-use` (about 170 MB) through rembg. The script uses
+     that light model for the person mask because 05's default, `birefnet-general`, ran
+     out of memory on a machine with 8 GB of RAM; set `SEGMENTER` in 05 to change 05's own.
+
 ### 6.2 Example pipeline commands
 
 Run these commands from `asset_pipeline/`:
@@ -215,6 +268,13 @@ Finally, verify the exported assets and regenerate metadata:
 
 ```powershell
 & ".\.venv\Scripts\python.exe" ".\scripts\04_verify_and_write_content.py"
+```
+
+To make the depth point clouds and compare them with the meshes (any environment with
+the packages in `requirements_depth.txt` will do):
+
+```powershell
+& ".\.venv\Scripts\python.exe" ".\scripts\06_depth_pointcloud.py" nepali_man_v2
 ```
 
 The exact Blender executable and pipeline dependencies depend on the local
@@ -279,3 +339,31 @@ incompatible graphics support may show a blank viewer.
 ## 9. Credits
 
 See `assets/CREDITS.md` for asset attribution and credits.
+
+## 10. What the depth check found
+
+Run on 2026-10-06 with `scripts/06_depth_pointcloud.py`. The mesh's front is shallow, so the
+error is read against a baseline: the best flat tilted plane, which uses no photo at all.
+
+| Figure | Mesh front relief (std) | Photo vs mesh relief (r) | Relief the photo has | Depth error (rms) | Flat plane (rms) | Photo explains | Within 2 cm |
+|---|---|---|---|---|---|---|---|
+| Prithvi Narayan Shah | 7.3 cm | 0.70 | 78% | 5.0 cm | 6.9 cm | 48% | 45% |
+| Nepali Man | 5.8 cm | 0.83 | 104% | 3.2 cm | 5.1 cm | 60% | 67% |
+| Nepali Woman | 4.8 cm | 0.61 | 70% | 3.7 cm | 4.6 cm | 36% | 48% |
+
+How to read it:
+
+- The photo's depth agrees with the mesh's front better than any flat plane does, so the two
+  estimates are consistent about the shape of the front. They still differ by 3 to 5 cm rms,
+  more than the mesh's own relief for the woman, so neither is accurate to the centimetre.
+- As a check that this is real shape and not just "a person is a blob", each photo's depth was
+  turned upside down, mirrored, and shifted before the comparison. The correlation fell for all
+  three, to at most 0.28 (Prithvi), 0.36 (woman) and 0.61 (man). The man stays high because he
+  is nearly symmetric and his torso is nearer than his legs whichever way the depth is turned,
+  so his 0.83 overstates what the photo depth knows.
+- The biggest disagreement is at the feet and legs. The depth model puts feet nearest, as it
+  does for most standing people photographed from a low camera, while the mesh sets the legs
+  back. Where the two differ the photo is not necessarily the one that is right.
+- The woman's photo is only 244 x 532 pixels, which limits her result.
+- The cloud-to-mesh distance (mean 1.5 to 2.0 cm, 95th percentile 4 to 7 cm) is how far the
+  cloud's points lie from the nearest point of the mesh surface, back included.
