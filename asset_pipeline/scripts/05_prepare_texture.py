@@ -4,10 +4,13 @@ Run from asset_pipeline/ (after 01 and 02, before 03):
     .venv/Scripts/python.exe scripts/05_prepare_texture.py [figure ...]
 
 For each such figure this
-  1. cuts the person out of the reference photo
+  1. cuts the person out of the reference photo (a photo that is already a cut-out, with a
+     transparent background, is used as it is: its transparency is the outline)
   2. finds how the raw mesh lines up with the photo, by searching for the position
      and scale where the mesh's front outline best covers the person's outline
-  3. cleans the photo's edges (no background colour bleeding onto the model)
+  3. cleans the photo's edges (no background colour bleeding onto the model), and, if the
+     spec has "clean_front", touches up the front photo itself (the same "copy" / "fill"
+     steps as "clean_back", for something in the photo that lands on the wrong part of the mesh)
   4. makes the picture used for the back and sides of the model: a separate back-view
      photo if the spec names one ("back_photo"), otherwise a copy of the front photo;
      either way with the things that should not show there covered up ("clean_back")
@@ -26,7 +29,6 @@ import cv2
 import numpy as np
 import trimesh
 from PIL import Image
-from rembg import new_session, remove
 from scipy.ndimage import distance_transform_edt
 from scipy.optimize import minimize
 
@@ -52,15 +54,29 @@ def cut_out(photo_name, ignore=()):
 
     `ignore` lists boxes (x0, y0, x1, y1), as fractions of the original photo, that are
     dropped from the mask: parts of the person that must not be used.
+
+    `photo_name` is looked up in input_images/source/, then in input_images/ (so a prepared
+    cut-out can be named "prepared/<figure>.png"). If the file has a transparent background,
+    that transparency is the mask and no background removal is run.
     """
-    img = Image.open(SRC / photo_name).convert("RGB")
+    path = next(p for p in (SRC / photo_name, SRC.parent / photo_name) if p.exists())
+    source = Image.open(path)
+    cutout = source.mode == "RGBA" and source.getchannel("A").getextrema()[0] < 255
+    img = source.convert("RGB")
     scale = PHOTO / max(img.size)
-    img = img.resize((round(img.width * scale), round(img.height * scale)), Image.LANCZOS)
+    size = (round(img.width * scale), round(img.height * scale))
+    img = img.resize(size, Image.LANCZOS)
     left, top = (PHOTO - img.width) // 2, (PHOTO - img.height) // 2
     canvas = Image.new("RGB", (PHOTO, PHOTO), img.getpixel((0, 0)))
     canvas.paste(img, (left, top))
 
-    alpha = np.array(remove(canvas, session=new_session("birefnet-general")))[:, :, 3] > 127
+    if cutout:
+        mask = Image.new("L", (PHOTO, PHOTO), 0)
+        mask.paste(source.getchannel("A").resize(size, Image.LANCZOS), (left, top))
+        alpha = np.array(mask) > 127
+    else:
+        from rembg import new_session, remove  # only needed for photos with a background
+        alpha = np.array(remove(canvas, session=new_session("birefnet-general")))[:, :, 3] > 127
     for x0, y0, x1, y1 in ignore:
         alpha[top + round(y0 * img.height):top + round(y1 * img.height),
               left + round(x0 * img.width):left + round(x1 * img.width)] = False
@@ -204,6 +220,8 @@ def prepare(name):
         print("  warning: low overlap, the photo may not match the mesh well")
 
     photo, clean = spread_edges(rgb, person)
+    if "clean_front" in texture:   # touch up the front photo itself (same steps as clean_back)
+        photo = clean_copy(photo, clean, texture["clean_front"], params)
     OUT.mkdir(parents=True, exist_ok=True)
     behind, behind_clean = back_view(texture, outline, mesh, params, name) if "back_photo" in texture \
         else (photo, clean)

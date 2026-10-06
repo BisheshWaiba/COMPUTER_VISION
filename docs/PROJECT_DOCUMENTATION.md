@@ -150,6 +150,11 @@ needed when using the checked-in assets.
 3. `scripts/05_prepare_texture.py`
    - Only for figures whose specification has a `texture` entry.
    - Cuts the person out of the reference photo and lines the photo up with the raw mesh.
+     A photo that is already a cut-out (a PNG with a transparent background, such as
+     `input_images/prepared/prithvi_narayan_shah.png`) is used as it is, so no background
+     removal runs and `rembg` is not needed for it.
+   - If the spec lists `clean_front` steps, touches up the front photo itself (for example,
+     paints over a shadow that lands on the wrong part of the mesh).
    - Makes the picture used for the back and sides: a separate back-view photo if the
      spec names one under `back_photo` (mirrored, lined up with the mesh, and with any
      `ignore` boxes left out), otherwise a copy of the front photo. Front-only details

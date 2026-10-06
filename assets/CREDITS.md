@@ -2,7 +2,7 @@
 
 The models were generated from the pictures below with Hunyuan3D-2
 (shape model only) and then split into named parts in Blender.
-The two figures in traditional dress are also painted from their reference photographs.
+All three figures are also painted from their reference photographs.
 
 ## Source pictures
 
@@ -13,7 +13,9 @@ The two figures in traditional dress are also painted from their reference photo
 | Nepali woman in Gunyu Cholo | Front and back reference photographs supplied by the project owner | n/a | n/a |
 
 The Prithvi Narayan Shah picture is from Wikimedia Commons. CC BY-SA requires
-attribution and that derived works are shared under the same licence.
+attribution and that derived works are shared under the same licence. The model's
+bronze texture is cut from this same picture, so the share-alike condition applies to
+the textured model too.
 
 ## Font
 
