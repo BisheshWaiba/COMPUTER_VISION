@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .venv/
+venv/
 
 # Asset pipeline: downloaded or generated, too large for git
 asset_pipeline/.venv/

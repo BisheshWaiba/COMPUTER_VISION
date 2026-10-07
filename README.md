@@ -19,57 +19,45 @@ figure assets.
 ## Requirements
 
 - Windows, macOS, or Linux.
-- Python 3.11 recommended.
+- Python 3.11 recommended (3.13 has also been used).
 - A graphics driver capable of OpenGL rendering.
 - The dependencies listed in `requirements.txt`:
   - Kivy 2.3.1
   - Panda3D 1.10.16
   - panda3d-gltf 1.3.0
 
-The repository currently includes a configured Windows virtual environment in
-`.venv`. A separate environment is included under `asset_pipeline/.venv` for
-optional asset generation.
+Virtual environments are not stored in the repository. Create one as shown
+below. The optional asset pipeline uses its own environment under
+`asset_pipeline/.venv`.
 
 ## Run the application on Windows
 
-Open PowerShell and run:
+Open PowerShell in the project folder (the one that contains `main.py`). The
+first time, create an environment and install the dependencies:
 
 ```powershell
-cd "C:\Users\prasi\Desktop\Project II\COMPUTER_VISION"
-.\.venv\Scripts\Activate.ps1
+py -3.11 -m venv venv
+.\venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Then start the application:
+
+```powershell
 python main.py
 ```
 
 Alternatively, run without activating the environment:
 
 ```powershell
-cd "C:\Users\prasi\Desktop\Project II\COMPUTER_VISION"
-& ".\.venv\Scripts\python.exe" ".\main.py"
-```
-
-If the environment has not been installed or needs to be refreshed:
-
-```powershell
-python -m pip install -r requirements.txt
+& ".\venv\Scripts\python.exe" ".\main.py"
 ```
 
 When the application opens, choose a figure from the gallery. Drag to rotate,
 use the mouse wheel or a pinch gesture to zoom, right-drag to pan, and click a
 model part to display its information. The **Point cloud** button at the top
 right of the viewer switches between the solid model and its point cloud.
-
-## Run from a new virtual environment
-
-If the included environment is unavailable:
-
-```powershell
-cd "C:\Users\prasi\Desktop\Project II\COMPUTER_VISION"
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python main.py
-```
 
 ## Project structure
 
@@ -110,11 +98,12 @@ documentation before running it.
 
 ## Troubleshooting
 
-- **PowerShell refuses to activate `.venv`:** run the application with the
-  direct `.venv\Scripts\python.exe` command above, or allow scripts for the
+- **PowerShell refuses to activate `venv`:** run the application with the
+  direct `venv\Scripts\python.exe` command above, or allow scripts for the
   current user with `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
 - **`ModuleNotFoundError`:** confirm that the command uses
-  `.venv\Scripts\python.exe`, then run `python -m pip install -r requirements.txt`.
+  `venv\Scripts\python.exe`, then run
+  `venv\Scripts\python.exe -m pip install -r requirements.txt`.
 - **Models do not load:** run the application from the project root and verify
   that `assets/models/` contains the `.glb` files referenced by
   `assets/figures.json`.

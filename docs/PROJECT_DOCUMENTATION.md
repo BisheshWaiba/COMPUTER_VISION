@@ -142,17 +142,18 @@ When adding or replacing a finished model:
 
 ## 5. Running the application
 
-From the project root on Windows:
+From the project root on Windows (the folder that contains `main.py`). Environments are
+not stored in the repository, so the first time create one:
 
 ```powershell
-cd "C:\Users\prasi\Desktop\Project II\COMPUTER_VISION"
-& ".\.venv\Scripts\python.exe" ".\main.py"
+py -3.11 -m venv venv
+& ".\venv\Scripts\python.exe" -m pip install -r requirements.txt
 ```
 
-To install dependencies into the included environment:
+Then start the application:
 
 ```powershell
-& ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
+& ".\venv\Scripts\python.exe" ".\main.py"
 ```
 
 The application should open a window titled **Figures of Nepal**.
@@ -241,7 +242,7 @@ needed when using the checked-in assets.
 Run these commands from `asset_pipeline/`:
 
 ```powershell
-cd "C:\Users\prasi\Desktop\Project II\COMPUTER_VISION\asset_pipeline"
+cd asset_pipeline
 & ".\.venv\Scripts\python.exe" ".\scripts\01_prepare_images.py"
 & ".\.venv\Scripts\python.exe" ".\scripts\02_generate_meshes.py"
 ```
@@ -310,13 +311,13 @@ the verification/content step so the generated file is not overwritten later.
 Use the virtual-environment interpreter explicitly:
 
 ```powershell
-& ".\.venv\Scripts\python.exe" -c "import kivy, panda3d; print('imports OK')"
+& ".\venv\Scripts\python.exe" -c "import kivy, panda3d; print('imports OK')"
 ```
 
 If an import fails, reinstall the application dependencies:
 
 ```powershell
-& ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
+& ".\venv\Scripts\python.exe" -m pip install -r requirements.txt
 ```
 
 ### Models are missing

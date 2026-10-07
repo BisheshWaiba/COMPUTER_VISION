@@ -1,6 +1,6 @@
 """Figures of Nepal: a gallery of 3D historical figures you can rotate and tap.
 
-Run with:  .venv/Scripts/python.exe main.py
+Run with:  venv/Scripts/python.exe main.py
 """
 from pathlib import Path
 
