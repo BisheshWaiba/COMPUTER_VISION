@@ -254,6 +254,111 @@
           }
         }
       }
+    },
+    {
+      "id": "prithvi_narayan_shah_v2",
+      "title": {
+        "en": "Prithvi Narayan Shah (Portrait)",
+        "ne": "पृथ्वीनारायण शाह (चित्र)"
+      },
+      "model": "models/prithvi_narayan_shah_v2.glb",
+      "thumbnail": "thumbnails/prithvi_narayan_shah_v2.png",
+      "description": {
+        "en": "The king who began the unification of Nepal, modelled on his best-known painted portrait, with one finger raised.",
+        "ne": "नेपाल एकीकरणको सुरुवात गर्ने राजा, उनको सबैभन्दा परिचित चित्रमा जस्तै एउटा औँला उठाएको मुद्रामा।"
+      },
+      "parts": {
+        "khukuri": {
+          "label": {
+            "en": "Khukuri",
+            "ne": "खुकुरी"
+          },
+          "info": {
+            "en": "The curved knife of the Gorkhali soldier, carried tucked into the waist sash. It served as both an everyday tool and a weapon, and remains a national symbol of Nepal.",
+            "ne": "गोर्खाली सिपाहीको बाङ्गो धार भएको हतियार, जुन कम्मरको पटुकामा सिउरिन्छ। यो दैनिक काममा र हतियार दुवैको रूपमा प्रयोग हुन्थ्यो र आज पनि नेपालको राष्ट्रिय प्रतीक मानिन्छ।"
+          }
+        },
+        "tarwar": {
+          "label": {
+            "en": "Tarwar (Sword)",
+            "ne": "तरवार"
+          },
+          "info": {
+            "en": "A long curved sword held point-down in the left hand. Swords like this were carried by Gorkhali commanders during the unification campaigns.",
+            "ne": "देब्रे हातमा टुप्पो तलतिर पारेर समातिएको लामो, बाङ्गो तरवार। एकीकरण अभियानका बेला गोर्खाली सेनापतिहरूले यस्ता तरवार बोक्थे।"
+          }
+        },
+        "dhal": {
+          "label": {
+            "en": "Dhal (Shield)",
+            "ne": "ढाल"
+          },
+          "info": {
+            "en": "A round shield, traditionally made of hide or metal with raised bosses, worn at the hip and used together with the sword.",
+            "ne": "छाला वा धातुबाट बनेको गोलो ढाल, जसमा उठेका बुट्टा हुन्छन्। यो कम्मरमा भिरिन्थ्यो र तरवारसँगै प्रयोग गरिन्थ्यो।"
+          }
+        },
+        "shripech": {
+          "label": {
+            "en": "Shripech (Crown)",
+            "ne": "श्रीपेच"
+          },
+          "info": {
+            "en": "The jewelled royal crown of the Shah kings, topped with a plume of bird-of-paradise feathers.",
+            "ne": "शाह राजाहरूको रत्नजडित राजमुकुट, जसको टुप्पोमा स्वर्गचरीको प्वाँखको कल्की हुन्छ।"
+          }
+        },
+        "mala": {
+          "label": {
+            "en": "Mala (Necklaces)",
+            "ne": "माला"
+          },
+          "info": {
+            "en": "Strings of pearls and gold worn around the neck and across the chest, a mark of royal rank.",
+            "ne": "घाँटी र छातीमा लगाइएका मोती र सुनका मालाहरू, जुन राजकीय मर्यादाको चिनो हुन्।"
+          }
+        },
+        "patuka": {
+          "label": {
+            "en": "Patuka (Waist Sash)",
+            "ne": "पटुका"
+          },
+          "info": {
+            "en": "A long cloth wound around the waist over the robe. It holds the khukuri in place and supports the back.",
+            "ne": "जामामाथि कम्मरमा बेरिने लामो कपडा। यसले खुकुरीलाई अड्याउँछ र ढाडलाई टेवा दिन्छ।"
+          }
+        },
+        "jutta": {
+          "label": {
+            "en": "Jutta (Shoes)",
+            "ne": "जुत्ता"
+          },
+          "info": {
+            "en": "Leather court shoes, shown here in brown.",
+            "ne": "दरबारमा लगाइने छालाको जुत्ता, यहाँ खैरो रङमा देखाइएको।"
+          }
+        },
+        "suruwal": {
+          "label": {
+            "en": "Suruwal (Trousers)",
+            "ne": "सुरुवाल"
+          },
+          "info": {
+            "en": "Close-fitting trousers worn under the robe, tight from the knee down to the ankle.",
+            "ne": "जामाभित्र लगाइने कसिलो सुरुवाल, जुन घुँडादेखि गोलीगाँठोसम्म कसिएको हुन्छ।"
+          }
+        },
+        "jama": {
+          "label": {
+            "en": "Jama (Robe)",
+            "ne": "जामा"
+          },
+          "info": {
+            "en": "A long-sleeved robe with a wide pleated skirt that falls to the knee, the formal dress of the court.",
+            "ne": "लामो बाहुला र घुँडासम्म आउने, चुन्ने परेको फराकिलो घेरा भएको पोसाक। यो दरबारको औपचारिक पहिरन थियो।"
+          }
+        }
+      }
     }
   ]
 }

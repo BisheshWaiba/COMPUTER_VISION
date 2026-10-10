@@ -3,11 +3,12 @@
 ## 1. Overview
 
 Figures of Nepal is an interactive 3D gallery built with Python. It presents
-three figures as explorable GLB models:
+four figures as explorable GLB models:
 
 1. Prithvi Narayan Shah
 2. Nepali Man with Istakot and Dhaka Topi (painted from a photograph)
 3. Nepali Woman in Gunyu Cholo (painted from front and back photographs)
+4. Prithvi Narayan Shah (Portrait) (generated and textured in ComfyUI, then imported)
 
 All text is available in English and Nepali. A button at the top right of both screens
 switches language. The app's own words and fonts are in `app/strings.py`; the text about
@@ -146,6 +147,13 @@ needed when using the checked-in assets.
    - Removes floaters and degenerate faces.
    - Reduces the mesh to the configured face limit.
    - Writes raw GLB meshes to `raw_meshes/`.
+
+   Alternative to steps 1 and 2, for a mesh generated elsewhere that already has its own
+   texture (for example a ComfyUI export): `scripts/02_import_textured_mesh.py`, run
+   through Blender. It welds the texture seams, reduces the triangle count, caps triangle
+   size so parts cut cleanly, keeps only the base colour picture at 2048 px, and writes
+   the result to `raw_meshes/`. Such a figure has `"texture": {"own": True}` in the
+   spec and skips the texture step below.
 
 3. `scripts/05_prepare_texture.py`
    - Only for figures whose specification has a `texture` entry.

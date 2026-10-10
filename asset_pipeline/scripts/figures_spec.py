@@ -302,6 +302,79 @@ FIGURES = {
             },
         ],
     },
+    # Generated outside this pipeline (ComfyUI, Pixal3D) from the well-known painted portrait,
+    # and brought in with 02_import_textured_mesh.py. It arrives fully textured, so
+    # "texture": {"own": True} tells 03 to keep that texture and only cut the parts.
+    "prithvi_narayan_shah_v2": {
+        "title": "Prithvi Narayan Shah (Portrait)",
+        "description": "The king who began the unification of Nepal, modelled on his best-known painted "
+                       "portrait, with one finger raised.",
+        "raw_mesh": "prithvi_narayan_shah_v2.glb",
+        "height_m": 1.80,
+        "texture": {"own": True},
+        "parts": [
+            {
+                "key": "khukuri", "label": 'Khukuri', "color": "#8a6a2f",
+                "info": 'The curved knife of the Gorkhali soldier, carried tucked into the waist sash. It served as both an everyday tool and a weapon, and remains a national symbol of Nepal.',
+                "rules": [("front", box(-0.02, 0.215, 0.11, 0.42), (-9.0, -0.13))],
+            },
+            {
+                "key": "hands", "color": "#b9865a",
+                "rules": [("front", box(-0.47, 0.80, -0.33, 1.05), ANY),
+                          ("front", box(0.30, -0.13, 0.43, 0.01), ANY)],
+            },
+            {
+                "key": "tarwar", "label": 'Tarwar (Sword)', "color": "#9aa0a8",
+                "info": 'A long curved sword held point-down in the left hand. Swords like this were carried by Gorkhali commanders during the unification campaigns.',
+                "rules": [("front", box(0.27, -0.24, 0.46, -0.02), ANY),
+                          ("front", [(0.26, -0.22), (0.40, -0.22), (0.39, -0.68), (0.27, -0.68), (0.07, -0.80),
+                                     (0.02, -0.76), (0.19, -0.60), (0.21, -0.46), (0.26, -0.46)], (-9.0, 0.05))],
+            },
+            {
+                "key": "dhal", "label": 'Dhal (Shield)', "color": "#3a3028",
+                "info": 'A round shield, traditionally made of hide or metal with raised bosses, worn at the hip and used together with the sword.',
+                "rules": [("side", disc(-0.15, -0.06, 0.135), (0.09, 0.285))],
+            },
+            {
+                "key": "shripech", "label": 'Shripech (Crown)', "color": "#d4af37",
+                "info": 'The jewelled royal crown of the Shah kings, topped with a plume of bird-of-paradise feathers.',
+                "rules": [("front", box(-0.21, 0.80, 0.14, 1.05), ANY),
+                          ("front", box(-0.075, 0.34, 0.02, 0.80), (0.11, 9.0))],
+            },
+            {
+                "key": "head", "color": "#b9865a",
+                "rules": [("front", [(-0.15, 0.66), (-0.07, 0.61), (0.05, 0.61), (0.11, 0.66),
+                                     (0.11, 0.80), (-0.15, 0.80)], ANY)],
+            },
+            {
+                "key": "mala", "label": "Mala (Necklaces)", "color": "#e6dcc0",
+                "info": "Strings of pearls and gold worn around the neck and across the chest, "
+                        "a mark of royal rank.",
+                "rules": [("front", [(-0.16, 0.63), (0.12, 0.63), (0.10, 0.45), (0.02, 0.30),
+                                     (-0.05, 0.30), (-0.14, 0.47)], (-9.0, -0.05))],
+            },
+            {
+                "key": "patuka", "label": 'Patuka (Waist Sash)', "color": "#f2efe6",
+                "info": 'A long cloth wound around the waist over the robe. It holds the khukuri in place and supports the back.',
+                "rules": [("front", box(-0.25, 0.105, 0.22, 0.255), ANY),
+                          ("front", box(-0.17, 0.0, -0.01, 0.11), (-9.0, -0.15))],
+            },
+            {
+                "key": "jutta", "label": 'Jutta (Shoes)', "color": "#6b4a2b",
+                "info": "Leather court shoes, shown here in brown.",
+                "rules": [("front", box(-1.0, -1.10, 1.0, -0.845), ANY)],
+            },
+            {
+                "key": "suruwal", "label": 'Suruwal (Trousers)', "color": "#c9a227",
+                "info": 'Close-fitting trousers worn under the robe, tight from the knee down to the ankle.',
+                "rules": [("front", box(-0.24, -0.845, 0.20, -0.43), (-9.0, 0.21))],
+            },
+            {
+                "key": "jama", "label": 'Jama (Robe)', "color": "#f4f1ea", "default": True,
+                "info": 'A long-sleeved robe with a wide pleated skirt that falls to the knee, the formal dress of the court.',
+            },
+        ],
+    },
 }
 
 
@@ -381,6 +454,31 @@ NEPALI = {
             "gunyu": ("गुन्यू",
                       "छापिएको सुती कपडा, जुन शरीरको तल्लो भागमा बेरेर कम्मरमा सिउरिन्छ। यस्ता चहकिला "
                       "फूलबुट्टे छाप धेरै प्रचलित छन्।"),
+        },
+    },
+    "prithvi_narayan_shah_v2": {
+        "title": "पृथ्वीनारायण शाह (चित्र)",
+        "description": "नेपाल एकीकरणको सुरुवात गर्ने राजा, उनको सबैभन्दा परिचित चित्रमा जस्तै "
+                       "एउटा औँला उठाएको मुद्रामा।",
+        "parts": {
+            "khukuri": ('खुकुरी',
+                'गोर्खाली सिपाहीको बाङ्गो धार भएको हतियार, जुन कम्मरको पटुकामा सिउरिन्छ। यो दैनिक काममा र हतियार दुवैको रूपमा प्रयोग हुन्थ्यो र आज पनि नेपालको राष्ट्रिय प्रतीक मानिन्छ।'),
+            "tarwar": ('तरवार',
+                'देब्रे हातमा टुप्पो तलतिर पारेर समातिएको लामो, बाङ्गो तरवार। एकीकरण अभियानका बेला गोर्खाली सेनापतिहरूले यस्ता तरवार बोक्थे।'),
+            "dhal": ('ढाल',
+                'छाला वा धातुबाट बनेको गोलो ढाल, जसमा उठेका बुट्टा हुन्छन्। यो कम्मरमा भिरिन्थ्यो र तरवारसँगै प्रयोग गरिन्थ्यो।'),
+            "shripech": ('श्रीपेच',
+                'शाह राजाहरूको रत्नजडित राजमुकुट, जसको टुप्पोमा स्वर्गचरीको प्वाँखको कल्की हुन्छ।'),
+            "mala": ("माला",
+                "घाँटी र छातीमा लगाइएका मोती र सुनका मालाहरू, जुन राजकीय मर्यादाको चिनो हुन्।"),
+            "patuka": ('पटुका',
+                'जामामाथि कम्मरमा बेरिने लामो कपडा। यसले खुकुरीलाई अड्याउँछ र ढाडलाई टेवा दिन्छ।'),
+            "jutta": ("जुत्ता",
+                "दरबारमा लगाइने छालाको जुत्ता, यहाँ खैरो रङमा देखाइएको।"),
+            "suruwal": ('सुरुवाल',
+                'जामाभित्र लगाइने कसिलो सुरुवाल, जुन घुँडादेखि गोलीगाँठोसम्म कसिएको हुन्छ।'),
+            "jama": ('जामा',
+                'लामो बाहुला र घुँडासम्म आउने, चुन्ने परेको फराकिलो घेरा भएको पोसाक। यो दरबारको औपचारिक पहिरन थियो।'),
         },
     },
 }

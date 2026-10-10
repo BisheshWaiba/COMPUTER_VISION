@@ -10,7 +10,8 @@ For every figure in figures_spec.py this:
   5. exports assets/models/<figure>.glb
 
 Figures with a "texture" entry in the spec are painted from a reference photo instead of
-flat colours; run 05_prepare_texture.py for them first.
+flat colours; run 05_prepare_texture.py for them first. Figures with "texture": {"own": True}
+arrived already textured (02_import_textured_mesh.py) and keep that texture.
 """
 import json
 import os
@@ -141,7 +142,9 @@ def build(name):
     default_index = next(i for i, p in enumerate(parts) if p.get("default"))
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    bpy.ops.import_scene.gltf(filepath=os.path.join(RAW, spec["raw_mesh"]))
+    # merge_vertices: a textured mesh is stored split along its texture seams; joined up again,
+    # the border smoothing below sees one surface instead of thousands of loose pieces
+    bpy.ops.import_scene.gltf(filepath=os.path.join(RAW, spec["raw_mesh"]), merge_vertices=True)
     obj = next(o for o in bpy.context.scene.objects if o.type == "MESH")
     for other in [o for o in bpy.context.scene.objects if o is not obj]:
         bpy.data.objects.remove(other)
@@ -187,7 +190,9 @@ def build(name):
             for i in island:
                 labels[i] = target
 
-    textured = bool(spec.get("texture"))
+    texture = spec.get("texture") or {}
+    own_texture = bool(texture.get("own"))  # the raw mesh arrived textured (02_import_textured_mesh.py)
+    textured = bool(texture) and not own_texture
     if textured:
         assign_photo_uvs(bm, labels, parts, neighbours, name)
         atlas = bpy.data.images.load(os.path.join(TEXTURE, f"{name}_atlas.png"))
@@ -202,8 +207,15 @@ def build(name):
     for v in bm.verts:
         v.co.x, v.co.y, v.co.z = (v.co.x - cx) * scale, (v.co.y - cy) * scale, (v.co.z - z0) * scale
 
+    source_material = obj.data.materials[0] if own_texture else None
     obj.data.materials.clear()
     for part in parts:
+        if own_texture:
+            # one material per part, so the mesh can be split by part; all share the texture
+            mat = source_material.copy()
+            mat.name = part["key"]
+            obj.data.materials.append(mat)
+            continue
         mat = bpy.data.materials.new(part["key"])
         mat.use_nodes = True
         bsdf = mat.node_tree.nodes["Principled BSDF"]

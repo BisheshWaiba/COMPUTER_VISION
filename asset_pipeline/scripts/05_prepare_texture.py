@@ -233,6 +233,7 @@ def prepare(name):
 
 
 if __name__ == "__main__":
-    names = sys.argv[1:] or [n for n, s in FIGURES.items() if s.get("texture")]
+    names = sys.argv[1:] or [n for n, s in FIGURES.items()
+                             if s.get("texture") and not s["texture"].get("own")]
     for n in names:
         prepare(n)
