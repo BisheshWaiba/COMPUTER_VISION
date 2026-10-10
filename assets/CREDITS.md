@@ -2,7 +2,7 @@
 
 The models were generated from the pictures below with Hunyuan3D-2
 (shape model only) and then split into named parts in Blender.
-The two figures in traditional dress are also painted from their reference photographs.
+Those three figures are also painted from their reference photographs.
 The portrait figure of Prithvi Narayan Shah was generated separately, in ComfyUI with the
 Pixal3D model, and arrived already textured.
 
@@ -16,7 +16,9 @@ Pixal3D model, and arrived already textured.
 | Prithvi Narayan Shah (Portrait) | Painted portrait (`prithivi.webp`) supplied by the project owner; its origin and licence are not recorded | n/a | n/a |
 
 The first Prithvi Narayan Shah picture is from Wikimedia Commons. CC BY-SA requires
-attribution and that derived works are shared under the same licence.
+attribution and that derived works are shared under the same licence. That model's
+bronze texture is cut from this same picture, so the share-alike condition applies to
+the textured model too.
 
 ## Font
 

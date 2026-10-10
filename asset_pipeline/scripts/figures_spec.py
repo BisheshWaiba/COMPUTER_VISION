@@ -48,21 +48,41 @@ FIGURES = {
                        "shown in his best-known pose with one finger raised.",
         "raw_mesh": "prithvi_narayan_shah.glb",
         "height_m": 2.05,
+        # Painted from the picture the mesh was made from: a bronze statue, so the metal, the
+        # verdigris and the marigold garland come straight from the photo (see the notes on
+        # "texture" under nepali_man_v2 for what each setting does).
+        "texture": {
+            "photo": "prepared/prithvi_narayan_shah.png",
+            # the photo is a pale, low-colour bronze: bring out the gold and the teal patina
+            "grade": {"vibrance": 1.9, "warmth": 4.0, "contrast": 1.1},
+            # the plume's dark inner side sits behind the cap in the photo but lands on the
+            # mesh's bigger cap: paint that corner with the cap's own colour
+            "clean_front": {
+                "fill": [((0.045, 0.745, 0.17, 0.835), (-0.09, 0.715, -0.03, 0.765))],
+            },
+            "clean_back": {
+                # applied in order: the garland, beads and collar hang on the front only, so cover
+                # them with robe; then the face, then the crown and plume, with the robe too
+                "copy": [((-0.14, 0.10, 0.23, 0.58), 0.0, -0.58),
+                         ((-0.14, 0.50, 0.20, 0.705), 0.0, -0.34),
+                         ((-0.16, 0.705, 0.40, 1.0), 0.0, -0.52)],
+            },
+        },
         "parts": [
             {
-                "key": "khukuri", "label": "Khukuri", "color": "#8a6a2f",
+                "key": "khukuri", "label": "Khukuri", "color": "#8a6a2f", "back": "project", "side": "front",
                 "info": "The curved knife of the Gorkhali soldier, carried tucked into the waist sash. "
                         "It served as both an everyday tool and a weapon, and remains a national symbol of Nepal.",
                 "rules": [("front", [(-0.115, -0.10), (-0.10, -0.035), (-0.02, -0.012), (0.065, -0.012),
                                      (0.06, -0.06), (-0.04, -0.105)], (-9.0, -0.10))],
             },
             {
-                "key": "hands", "color": "#b9865a",
+                "key": "hands", "color": "#b9865a", "back": "front", "side": "front",
                 "rules": [("front", box(-0.40, 0.81, -0.25, 1.05), ANY),
                           ("front", box(0.235, -0.215, 0.39, -0.085), (-9.0, -0.065))],
             },
             {
-                "key": "tarwar", "label": "Tarwar (Sword)", "color": "#9aa0a8",
+                "key": "tarwar", "label": "Tarwar (Sword)", "color": "#9aa0a8", "back": "project", "side": "front",
                 "info": "A long curved sword held point-down in the left hand. Swords like this were carried "
                         "by Gorkhali commanders during the unification campaigns.",
                 "rules": [("front", [(0.215, -0.20), (0.39, -0.20), (0.39, -0.32), (0.32, -0.45), (0.32, -0.67),
@@ -70,26 +90,26 @@ FIGURES = {
                                      (0.07, -0.80), (0.15, -0.66), (0.19, -0.45), (0.215, -0.30)], (-9.0, -0.125))],
             },
             {
-                "key": "dhal", "label": "Dhal (Shield)", "color": "#3a3028",
+                "key": "dhal", "label": "Dhal (Shield)", "color": "#3a3028", "back": "flat", "side": "flat", "swatch_box": (0.27, -0.30, 0.31, -0.10),
                 "info": "A round shield, traditionally made of hide or metal with raised bosses, "
                         "worn at the hip and used together with the sword.",
                 "rules": [("side", disc(0.03, -0.14, 0.17), (0.135, 0.245)),
                           ("side", arc(0.03, -0.14, 0.17, -120, 120), (0.135, 0.40))],
             },
             {
-                "key": "shripech", "label": "Shripech (Crown)", "color": "#d4af37",
+                "key": "shripech", "label": "Shripech (Crown)", "color": "#d4af37", "back": "project", "side": (0.0, 0.6, 0.03),
                 "info": "The jewelled royal crown of the Shah kings, topped with a plume of "
                         "bird-of-paradise feathers.",
                 "rules": [("front", box(-0.16, 0.69, 0.42, 1.05), ANY)],
             },
             {
-                "key": "head", "color": "#b9865a",
+                "key": "head", "color": "#b9865a", "back": "project", "side": "front",
                 "rules": [("front", [(-0.095, 0.57), (0.105, 0.57), (0.105, 0.615), (0.155, 0.615), (0.155, 0.705),
                                      (-0.14, 0.705), (-0.14, 0.615), (-0.095, 0.615)], ANY),
                           ("front", [(-0.07, 0.515), (0.075, 0.515), (0.10, 0.58), (-0.09, 0.58)], (-9.0, -0.05))],
             },
             {
-                "key": "mala", "label": "Mala (Garland)", "color": "#e8791c",
+                "key": "mala", "label": "Mala (Garland)", "color": "#e8791c", "back": "#e5781c", "side": "flat",
                 "info": "A garland worn around the neck. Statues of Prithvi Narayan Shah are garlanded with "
                         "marigolds on Prithvi Jayanti, the day that marks his birth.",
                 "rules": [("front", [(-0.125, 0.61), (-0.05, 0.61), (-0.03, 0.50), (0.02, 0.31), (0.02, 0.22),
@@ -99,23 +119,23 @@ FIGURES = {
                           ("front", box(-0.035, 0.005, 0.075, 0.24), (-9.0, -0.10))],
             },
             {
-                "key": "patuka", "label": "Patuka (Waist Sash)", "color": "#f2efe6",
+                "key": "patuka", "label": "Patuka (Waist Sash)", "color": "#f2efe6", "back": "project", "side": (0.18, 0.5),
                 "info": "A long cloth wound around the waist over the robe. It holds the khukuri in place "
                         "and supports the back.",
                 "rules": [("front", box(-0.175, -0.005, 0.225, 0.118), ANY)],
             },
             {
-                "key": "jutta", "label": "Jutta (Shoes)", "color": "#6b4a2b",
+                "key": "jutta", "label": "Jutta (Shoes)", "color": "#6b4a2b", "back": "project", "side": "front",
                 "info": "Leather shoes with upturned, pointed toes, a style worn at court in the period.",
                 "rules": [("front", box(-1.0, -1.05, 1.0, -0.865), ANY)],
             },
             {
-                "key": "suruwal", "label": "Suruwal (Trousers)", "color": "#c9a227",
+                "key": "suruwal", "label": "Suruwal (Trousers)", "color": "#c9a227", "back": "project", "side": (0.12, 0.5),
                 "info": "Close-fitting trousers worn under the robe, tight from the knee down to the ankle.",
                 "rules": [("front", box(-1.0, -0.865, 1.0, -0.475), ANY)],
             },
             {
-                "key": "jama", "label": "Jama (Robe)", "color": "#f4f1ea", "default": True,
+                "key": "jama", "label": "Jama (Robe)", "color": "#f4f1ea", "default": True, "back": "project", "side": (0.2, 0.5), "side_bands": [(-1.0, 0.0, (0.15, 0.5))],
                 "info": "A long-sleeved robe with a wide pleated skirt that falls to the knee, "
                         "the formal dress of the court.",
             },
