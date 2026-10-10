@@ -20,6 +20,7 @@ from collections import Counter, deque
 
 import bmesh
 import bpy
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -29,6 +30,7 @@ PIPELINE = os.path.dirname(HERE)
 RAW = os.path.join(PIPELINE, "raw_meshes")
 OUT = os.path.join(os.path.dirname(PIPELINE), "assets", "models")
 TEXTURE = os.path.join(PIPELINE, "input_images", "texture")
+SOURCE = os.path.join(PIPELINE, "input_images", "source")
 
 SMOOTH_PASSES = 4
 MIN_ISLAND_FACES = 120
@@ -136,6 +138,39 @@ def assign_photo_uvs(bm, labels, parts, neighbours, name):
             loop[uv].uv = value
 
 
+def photo_patch(part, bm, labels, index):
+    """Paint one part straight from a photo, seen from the front.
+
+    Used where a generated texture is poor but the reference picture is sharp (a face).
+    part["photo"] gives the picture (in input_images/source), the box of it to keep
+    (x0, y0, x1, y1 in pixels, y down) and landmark pairs ((mesh x, mesh z), (pixel x, pixel y))
+    that say where points of the raw mesh are in the picture. Returns the cropped image.
+    """
+    spec = part["photo"]
+    mesh_pts = np.array([m for m, _ in spec["landmarks"]], float)
+    pixels = np.array([px for _, px in spec["landmarks"]], float)
+    # least squares: pixel x from mesh x, pixel y from mesh z (scale and offset each)
+    ax, bx = np.polyfit(mesh_pts[:, 0], pixels[:, 0], 1)
+    ay, by = np.polyfit(mesh_pts[:, 1], pixels[:, 1], 1)
+
+    source = bpy.data.images.load(os.path.join(SOURCE, spec["image"]))
+    width, height = source.size
+    x0, y0, x1, y1 = spec["crop"]
+    full = np.array(source.pixels[:], dtype=np.float32).reshape(height, width, 4)  # rows run bottom-up
+    crop = full[height - y1:height - y0, x0:x1]
+    image = bpy.data.images.new(part["key"] + "_photo", x1 - x0, y1 - y0, alpha=False)
+    image.pixels.foreach_set(crop.ravel())
+    image.pack()
+
+    uv = bm.loops.layers.uv.verify()
+    for face, label in zip(bm.faces, labels):
+        if label == index:
+            for loop in face.loops:
+                co = loop.vert.co
+                loop[uv].uv = ((ax * co.x + bx - x0) / (x1 - x0), (y1 - (ay * co.z + by)) / (y1 - y0))
+    return image
+
+
 def build(name):
     spec = FIGURES[name]
     parts = spec["parts"]
@@ -198,6 +233,9 @@ def build(name):
         atlas = bpy.data.images.load(os.path.join(TEXTURE, f"{name}_atlas.png"))
         atlas.colorspace_settings.name = "sRGB"
 
+    # must run before the mesh is rescaled below: landmarks are in raw-mesh coordinates
+    photos = {i: photo_patch(part, bm, labels, i) for i, part in enumerate(parts) if "photo" in part}
+
     # real-world size, feet on the ground, centred
     zs = [v.co.z for v in bm.verts]
     xs = [v.co.x for v in bm.verts]
@@ -209,7 +247,19 @@ def build(name):
 
     source_material = obj.data.materials[0] if own_texture else None
     obj.data.materials.clear()
-    for part in parts:
+    for index, part in enumerate(parts):
+        if index in photos:
+            mat = bpy.data.materials.new(part["key"])
+            mat.use_nodes = True
+            bsdf = mat.node_tree.nodes["Principled BSDF"]
+            tex = mat.node_tree.nodes.new("ShaderNodeTexImage")
+            tex.image = photos[index]
+            tex.extension = "EXTEND"
+            mat.node_tree.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+            bsdf.inputs["Roughness"].default_value = 0.8
+            bsdf.inputs["Metallic"].default_value = 0.0
+            obj.data.materials.append(mat)
+            continue
         if own_texture:
             # one material per part, so the mesh can be split by part; all share the texture
             mat = source_material.copy()

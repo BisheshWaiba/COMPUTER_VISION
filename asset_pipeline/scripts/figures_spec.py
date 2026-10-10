@@ -362,6 +362,24 @@ FIGURES = {
                           ("front", box(-0.075, 0.34, 0.02, 0.80), (0.11, 9.0))],
             },
             {
+                # The generated texture smears the face, so the front of the head is painted
+                # straight from the portrait instead (see photo_patch in 03_split_parts.py).
+                # Landmarks, in order: both eyes, nose, both moustache tips, mouth, chin,
+                # brow under the crown, both cheek edges.
+                "key": "face", "color": "#b9865a",
+                "photo": {
+                    "image": "prithivi.webp", "crop": (430, 200, 620, 380),
+                    "landmarks": [((-0.066, 0.754), (497, 265)), ((0.016, 0.758), (550, 262)),
+                                  ((-0.022, 0.716), (525, 297)), ((-0.078, 0.690), (483, 310)),
+                                  ((0.046, 0.700), (570, 310)), ((-0.028, 0.680), (527, 317)),
+                                  ((-0.030, 0.635), (527, 353)), ((-0.025, 0.810), (525, 222)),
+                                  ((-0.114, 0.740), (462, 280)), ((0.056, 0.740), (587, 280))],
+                },
+                "rules": [("front", [(-0.105, 0.80), (0.052, 0.80), (0.058, 0.71), (0.035, 0.655),
+                                     (-0.005, 0.632), (-0.055, 0.632), (-0.09, 0.66), (-0.108, 0.72)],
+                           (-9.0, -0.07))],
+            },
+            {
                 "key": "head", "color": "#b9865a",
                 "rules": [("front", [(-0.15, 0.66), (-0.07, 0.61), (0.05, 0.61), (0.11, 0.66),
                                      (0.11, 0.80), (-0.15, 0.80)], ANY)],
